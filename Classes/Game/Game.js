@@ -3,8 +3,14 @@ class Game {
     static game = null;
     static scoreArr = [0, 15, 30, 40, 45, 50];
 
-    constructor() {
+    constructor(players) {
         Player.instantiate();
+        if(players == 1) {
+            Player.players[1].ai = true;
+        }
+        ballAltitudeDiv.style.display = 'flex';
+        document.querySelector('#scoreboard').style.display = 'flex';
+        document.querySelector('#modes').style.display = 'none';
 
         Game.game = this;
         this.score = [
@@ -26,6 +32,7 @@ class Game {
         this.exclamationMessage = '';
         this.bounceCount = 0;
         this.newSet();
+        requestAnimationFrame(gameFunction);
     }
 
     newSet(playerNum) {

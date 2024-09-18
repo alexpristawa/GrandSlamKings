@@ -16,11 +16,36 @@ html,body {
 }
 
 body {
-    background-color: black;
+    background-color: rgb(63, 120, 56);
     background-size: cover;
     overflow: hidden;
     margin: 0;
     padding: 0;
+}
+
+#modes {
+    display: flex;
+    position: absolute;
+    top: 45vh;
+    left: 35vw;
+    height: 10vh;
+    width: 30vw;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#modes > div {
+    height: 100%;
+    width: 40%;
+    background-color: red;
+    border-radius: 1vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: 600;
+    font-size: 1.3rem;
+    cursor: pointer;
 }
 
 #ballAltitude {
@@ -30,6 +55,7 @@ body {
     width: 1vw;
     height: 60vh;
     border: 3px solid white;
+    display: none;
 }
 
 #ballAltitude > .rectangle {
@@ -120,7 +146,7 @@ body {
     left: 5vw;
     height: 6vh;
     width: 15vw;
-    display: flex;
+    display: none;
     align-items: center;
 }
 

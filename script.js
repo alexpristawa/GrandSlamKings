@@ -76,7 +76,6 @@ document.addEventListener('keyup', (event) => {
 // Call the function with the canvas and context
 adjustCanvas(canvas, ctx);
 Render.instantiate();
-new Game();
 
 let gameFunction = () => {
     if(previousTime == undefined) {
@@ -127,5 +126,3 @@ let gameFunction = () => {
 
     requestAnimationFrame(gameFunction);
 }
-
-requestAnimationFrame(gameFunction);

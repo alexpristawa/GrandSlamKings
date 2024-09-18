@@ -11,6 +11,7 @@ class Player {
         this.num = num;
         this.num == 0 ? this.oppNum = 1 : this.oppNum = 0;
         this.x = cDim.x/2;
+        this.ai = false;
         if(num == 0) {
             this.keybinds = {
                 up: 'w',
@@ -113,6 +114,75 @@ class Player {
     }
 
     update() {
+        let oldKeyboard = JSON.parse(JSON.stringify(keyboard));
+        if(this.ai) {
+            if(Game.game.receiving == this.num) {
+                let baseline = cDim.y/2 + cDim.y/2 * this.directionCorrect;
+                let factor = (baseline-Ball.ball.y) / Ball.ball.vVelocity;
+                let x = Ball.ball.x + Ball.ball.hVelocity * factor;
+                if(x < this.x - cDim.y*0.05) {
+                    keyboard[this.keybinds.left] = true;
+                } else if(x < this.x) {
+                    keyboard[this.keybinds.right] = true;
+                } else if(x > this.x + cDim.y*0.05) {
+                    keyboard[this.keybinds.right] = true;
+                } else {
+                    keyboard[this.keybinds.left] = true;
+                }
+
+                if(Math.abs(Ball.ball.vVelocity) < 15) {
+                    if(this.directionCorrect == 1) {
+                        keyboard[this.keybinds.up] = true;
+                    } else {
+                        keyboard[this.keybinds.down] = true;
+                    }
+                } else if(Math.abs(Ball.ball.vVelocity) > 30) {
+                    if(this.directionCorrect == 1) {
+                        keyboard[this.keybinds.down] = true;
+                    } else {
+                        keyboard[this.keybinds.up] = true;
+                    }
+                }
+            } else {
+                if(Game.game.receiving == undefined) {
+                    if(Game.game.serving == this.num) {
+                        if(Ball.ball == undefined) {
+                            if(keyboardQueries[this.keybinds.flat]) {
+                                keyboardQueries[this.keybinds.flat]();
+                                keyboardOffQueries[this.keybinds.flat]();
+                            }
+                        } else if(Ball.ball.zVelocity < 0) {
+                            let highestHeight = Player.heightToShoulder+Player.shoulderToRacket;
+                            let lowestHeight = highestHeight - Player.headHeight*4;
+                            let factor = ((Ball.ball.z-lowestHeight)/(highestHeight-lowestHeight));
+                            if(factor > 0.25 && factor < 0.75) {
+                                if(keyboardQueries[this.keybinds.flat]) {
+                                    keyboardQueries[this.keybinds.flat]();
+                                }
+                            }
+                        } 
+                    }
+                } else if(this.x > cDim.x*0.55) {
+                    keyboard[this.keybinds.left] = true;
+                } else if(this.x < cDim.x*0.45) {
+                    keyboard[this.keybinds.right] = true;
+                }
+
+                if(this.directionCorrect == -1) {
+                    if(this.y < -cDim.y*0.05) {
+                        keyboard[this.keybinds.up] = true;
+                    } else if(this.y > cDim.y * 0.5) {
+                        keyboard[this.keybinds.down] = true;
+                    }
+                } else {
+                    if(this.y < cDim.y*0.95) {
+                        keyboard[this.keybinds.down] = true;
+                    } else if(this.y > cDim.y * 1.05) {
+                        keyboard[this.keybinds.up] = true;
+                    }
+                }
+            }
+        }
         let movedVertically = false;
         let movedHorizontally = false;
         let hAccelerationMultiplier = 1;
@@ -160,6 +230,9 @@ class Player {
                 this.hVelocity = 0;
             }
         }
+
+        keyboard = oldKeyboard;
+
         if(Math.abs(this.hVelocity) > this.maxVelocity) {
             this.hVelocity = this.maxVelocity*Math.sign(this.hVelocity);
         }
@@ -206,9 +279,11 @@ class Player {
                     if(oldKey == undefined && this.keybinds.remember != undefined) oldKey = this.keybinds.remember;
                     let key = this.getHitKey();
                     if(key == 'undefined' && oldKey != undefined) key = oldKey;
-                    console.log(oldKey);
                     let type = Object.keys(this.keybinds).find(KEY => this.keybinds[KEY] == key && KEY != 'hit' && KEY != 'remember');
 
+                    if(this.ai && this.windingUp >= 0.5) {
+                        this.swing(30, angle, type);
+                    }
                     if(!keyboard[this.getHitKey()]) {
                         this.swing(this.windingUp*60, angle, type);
                     } else if(this.windingUp > 0.5) {
@@ -216,11 +291,14 @@ class Player {
                     }
                     lineDistance += this.windingUp*10;
                 }
+
+                if(this.ai) keyboard[this.getHitKey()] = false;
+
                 Canvas.line(sx, sy, sx + this.directionCorrect * lineDistance*mScale*Math.cos(angle), sy - lineDistance*mScale*Math.sin(angle), false);
             } else {
                 this.windingUp = undefined;
             }
-        }
+        } else this.aiDesiredAngle = undefined;
     }
 
     swing(swingSpeed, angle, type) {
@@ -279,6 +357,31 @@ class Player {
     }
 
     getHitKey() {
+        let dy = this.directionCorrect * (this.y - Ball.ball.y);
+        let dx = Ball.ball.x - this.x;
+        let angle = Math.atan2(dy, dx);
+        let desiredY = cDim.y/2 + cDim.y/2 * -this.directionCorrect;
+        if(this.ai && Math.abs(Ball.ball.y - this.y) < (Player.shoulderToRacket + Player.centerToShoulder)/2) {
+            if(this.aiDesiredAngle == undefined) {
+                let fix = 1;
+                if(Ball.ball.x >= this.x) {
+                    fix = -1;
+                }
+                this.aiDesiredAngle = Math.atan2(this.y-desiredY, cDim.x/2-this.x) + Math.PI/2 * fix + Math.random()*Math.PI/10 - Math.PI/20;
+                if(this.num == 0) {
+                    this.aiDesiredAngle += Math.PI;
+                }
+                if(this.aiDesiredAngle > Math.PI) {
+                    this.aiDesiredAngle -= 2*Math.PI;
+                }
+            }
+            if(Math.abs(angle - this.aiDesiredAngle) < Math.PI/25) {
+                this.keybinds.hit = this.keybinds.flat;
+                this.keybinds.remember = this.keybinds.hit;
+                keyboard[this.keybinds.flat] = true;
+                return this.keybinds.flat;
+            }
+        } else if(this.ai) return;
         let result = 'undefined';
         if(this.keybinds.hit != undefined) {
             if(keyboard[this.keybinds.hit]) {
