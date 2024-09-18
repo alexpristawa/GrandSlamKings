@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kalam&display=swap');  /*  font-family: 'Kalam', cursive;  */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&display=swap'); /*  font-family: 'Noto Sans Mono', monospace; */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap'); /*  font-family: 'Noto Serif', serif;  */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap'); /*  font-family: 'Nunito', sans-serif;  */
+        @import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap'); /*  font-family: 'Parisienne', cursive;  */
+        @import url('https://fonts.googleapis.com/css2?family=Train+One&display=swap'); /* font-family: 'Train One', system-ui; */
+        @import url('https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap'); /* font-family: "Bree Serif", serif; */
+        @import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap'); /* font-family: "Exo 2", sans-serif; */
+    </style>
+    <title>Document</title>
+</head>
+<body>
+
+    <div id = 'shotType'>
+
+    </div>
+
+    <div id = 'scoreboard'>
+        <div class = 'bar'></div>
+        <div class = 'names'>
+            <div>Player 1</div>
+            <div>Player 2</div>
+        </div>
+        <div class = 'serving'>
+            <div>&lt;</div>
+            <div>&lt;</div>
+        </div>
+        <div class = 'sets'>
+            <div>0</div>
+            <div>0</div>
+        </div>
+        <div class = 'games'>
+            <div>0</div>
+            <div>0</div>
+        </div>
+        <div class = 'points'>
+            <div>0</div>
+            <div>0</div>
+        </div>
+    </div>
+
+    <div id = 'exclamation'>
+        <div class = 'bigText'></div>
+        <div class = 'smallText'></div>
+    </div>
+
+    <div id = 'ballAltitude'>
+        <div class = 'rectangle'></div>
+        <div class = 'target'>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    
+    <canvas id="canvas"></canvas>
+
+    <script src="Classes/Ball/Ball.js"></script>
+    <script src="Classes/Game/Game.js"></script>
+    <script src="Classes/Physics/Physics.js"></script>
+    <script src="Classes/Player/Player.js"></script>
+    <script src="Classes/Render/Render.js"></script>
+    <script src="Scripts/animationFunctions.js"></script>
+    <script src="Scripts/Canvas.js"></script>
+    <script src="Scripts/positionFunctions.js"></script>
+    <script src="Scripts/myLibrary.js"></script>
+    <script src='script.js'></script>
+</body>
+</html>
