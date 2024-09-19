@@ -87,6 +87,10 @@ let gameFunction = () => {
     deltaTime = (currentTime - previousTime)/1000;
     potentialDeltaTime = deltaTime;
     previousTime = currentTime;
+    if(deltaTime > 0.1) {
+        requestAnimationFrame(gameFunction);
+        return;
+    }
     if(Game.game.receiving != undefined && Ball.ball != undefined && (Player.players[Game.game.receiving].x - Ball.ball.x)**2 + (Player.players[Game.game.receiving].y - Ball.ball.y)**2 < (Player.shoulderToRacket + Player.centerToShoulder)**2 * 2) {
         deltaTime /= 7.5;
         if(Player.players[Game.game.receiving].windingUp != undefined) {
