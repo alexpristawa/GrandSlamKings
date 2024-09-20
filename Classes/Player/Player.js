@@ -331,6 +331,7 @@ class Player {
             let p = Ball.ball.z/dy;
             ballMomentum.z = -ballMomentum.y * p * 0.7;
             ballMomentum.y*=2;
+            Ball.ball.xAngularVelocity = 0;
         }
 
         Ball.ball.hVelocity = -ballMomentum.x/Ball.mass;
