@@ -327,9 +327,9 @@ class Player {
         ballMomentum.y += racketMomentum.y/4;
         ballMomentum.z += racketMomentum.z/4;
 
-        if(Ball.ball.z > 3) {
+        if(Ball.ball.z > 2) {
             let p = Ball.ball.z/dy;
-            ballMomentum.z = -ballMomentum.y * p;
+            ballMomentum.z = -ballMomentum.y * p * 0.7;
             ballMomentum.y*=2;
         }
 
