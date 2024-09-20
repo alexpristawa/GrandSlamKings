@@ -120,6 +120,9 @@ class Player {
                 let baseline = cDim.y/2 + cDim.y/2 * this.directionCorrect;
                 let factor = (baseline-Ball.ball.y) / Ball.ball.vVelocity;
                 let x = Ball.ball.x + Ball.ball.hVelocity * factor;
+                if(Math.abs(Ball.ball.y - this.y) < (Player.centerToShoulder + Player.shoulderToRacket)*2) {
+                    x = Ball.ball.x;
+                }
                 if(x < this.x - cDim.y*0.05) {
                     keyboard[this.keybinds.left] = true;
                 } else if(x < this.x) {
@@ -323,6 +326,12 @@ class Player {
         ballMomentum.x += racketMomentum.x/4;
         ballMomentum.y += racketMomentum.y/4;
         ballMomentum.z += racketMomentum.z/4;
+
+        if(Ball.ball.z > 3) {
+            let p = Ball.ball.z/dy;
+            ballMomentum.z = -ballMomentum.y * p;
+            ballMomentum.y*=2;
+        }
 
         Ball.ball.hVelocity = -ballMomentum.x/Ball.mass;
         Ball.ball.vVelocity = -ballMomentum.y/Ball.mass;
