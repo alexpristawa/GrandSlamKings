@@ -296,6 +296,7 @@ class Player {
                 }
 
                 if(this.ai) keyboard[this.getHitKey()] = false;
+                this.aiShotType = undefined;
 
                 Canvas.line(sx, sy, sx + this.directionCorrect * lineDistance*mScale*Math.cos(angle), sy - lineDistance*mScale*Math.sin(angle), false);
             } else {
@@ -329,8 +330,7 @@ class Player {
 
         if(Ball.ball.z > 2) {
             let p = Ball.ball.z/dy;
-            ballMomentum.z = -ballMomentum.y * p * 0.7;
-            ballMomentum.y*=2;
+            ballMomentum.z = -ballMomentum.y * p * 0.45;
             Ball.ball.xAngularVelocity = 0;
         }
 
@@ -373,11 +373,23 @@ class Player {
         let desiredY = cDim.y/2 + cDim.y/2 * -this.directionCorrect;
         if(this.ai && Math.abs(Ball.ball.y - this.y) < (Player.shoulderToRacket + Player.centerToShoulder)/2) {
             if(this.aiDesiredAngle == undefined) {
-                let fix = 1;
-                if(Ball.ball.x >= this.x) {
-                    fix = -1;
+                if(Math.random() < 2/3) {
+                    let fix = 1;
+                    if(Ball.ball.x >= this.x) {
+                        fix = -1;
+                    }
+                    if(this.opp.x < cDim.x/2) {
+                        this.aiDesiredAngle = Math.atan2(this.y, cDim.x-this.x) + Math.PI/2 * fix
+                    } else {
+                        this.aiDesiredAngle = Math.atan2(this.y, -this.x) + Math.PI/2 * fix
+                    }
+                } else {
+                    let fix = 1;
+                    if(Ball.ball.x >= this.x) {
+                        fix = -1;
+                    }
+                    this.aiDesiredAngle = Math.atan2(this.y-desiredY, cDim.x/2-this.x) + Math.PI/2 * fix + Math.random()*Math.PI/10 - Math.PI/20;
                 }
-                this.aiDesiredAngle = Math.atan2(this.y-desiredY, cDim.x/2-this.x) + Math.PI/2 * fix + Math.random()*Math.PI/10 - Math.PI/20;
                 if(this.num == 0) {
                     this.aiDesiredAngle += Math.PI;
                 }
@@ -385,11 +397,22 @@ class Player {
                     this.aiDesiredAngle -= 2*Math.PI;
                 }
             }
-            if(Math.abs(angle - this.aiDesiredAngle) < Math.PI/25) {
+            let prev = this.aiAngleWas;
+            this.aiAngleWas = Math.sign(angle-this.aiDesiredAngle);
+            console.log('angle  ' + angle);
+            if(Math.abs(angle - this.aiDesiredAngle) < Math.PI/50 || (prev != undefined && this.aiAngleWas == prev)) {
                 this.keybinds.hit = this.keybinds.flat;
                 this.keybinds.remember = this.keybinds.hit;
-                keyboard[this.keybinds.flat] = true;
-                return this.keybinds.flat;
+                this.aiAngleWas = undefined;
+                if(this.aiShotType == undefined) {
+                    let shot = 'flat';
+                    if(Math.random() > 1/3) {
+                        shot = 'topspin';
+                    }
+                    this.aiShotType = shot;
+                }
+                keyboard[this.keybinds[this.aiShotType]] = true;
+                return this.keybinds[this.aiShotType];
             }
         } else if(this.ai) return;
         let result = 'undefined';
