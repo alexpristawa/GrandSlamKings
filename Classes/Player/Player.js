@@ -158,7 +158,7 @@ class Player {
                             let highestHeight = Player.heightToShoulder+Player.shoulderToRacket;
                             let lowestHeight = highestHeight - Player.headHeight*4;
                             let factor = ((Ball.ball.z-lowestHeight)/(highestHeight-lowestHeight));
-                            if(factor > 0.25 && factor < 0.75) {
+                            if(factor > 0.75 && factor < 1) {
                                 if(keyboardQueries[this.keybinds.flat]) {
                                     keyboardQueries[this.keybinds.flat]();
                                 }
@@ -330,7 +330,8 @@ class Player {
 
         if(Ball.ball.z > 2) {
             let p = Ball.ball.z/dy;
-            ballMomentum.z = -ballMomentum.y * p * 0.45;
+            ballMomentum.z = -ballMomentum.y * p;
+            ballMomentum.y *= 4;
             Ball.ball.xAngularVelocity = 0;
         }
 

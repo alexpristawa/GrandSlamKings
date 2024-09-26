@@ -69,6 +69,7 @@ class Physics {
         
             if(!ball.contactingGround) Game.game.ballBounce();
             ball.contactingGround = true;
+            ball.zVelocity = Math.min(20, ball.zVelocity)
         } else if(ball.contactingGround) {
             ball.contactingGround = false;
             ball.zVelocity *= Ball.efficiency;
