@@ -79,10 +79,10 @@ class Player {
         }
         if(Game.game.servingSide == 'deuce') {
             this.x += this.width/2 * this.directionCorrect;
-            this.opp.x -= cDim.x/4 * this.directionCorrect;
+            this.opp.x -= cDim.x*0.3 * this.directionCorrect;
         } else {
             this.x -= this.width/2 * this.directionCorrect;
-            this.opp.x += cDim.x/4 * this.directionCorrect;
+            this.opp.x += cDim.x*0.3 * this.directionCorrect;
         }
 
         this.hVelocity = 0;
