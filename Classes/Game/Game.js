@@ -4,10 +4,7 @@ class Game {
     static scoreArr = [0, 15, 30, 40, 45, 50];
 
     constructor(players) {
-        Player.instantiate();
-        if(players == 1) {
-            Player.players[1].ai = true;
-        }
+        Player.instantiate(players);
         ballAltitudeDiv.style.display = 'flex';
         document.querySelector('#scoreboard').style.display = 'flex';
         document.querySelector('#modes').style.display = 'none';

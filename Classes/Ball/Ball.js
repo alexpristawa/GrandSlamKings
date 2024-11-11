@@ -34,6 +34,40 @@ class Ball {
         Physics.checkGroundCollision(this);
     }
 
+    getPrediction() {
+        //Calculate the time for the ball to hit the ground using kinematics and quadratic formula
+        let a = 0.5 * Physics.g;
+        let b = this.zVelocity;
+        let c = this.z - Ball.radius;
+
+        let time = (-b + Math.sqrt(b**2 - 4*a*c))/(2*a);
+        
+        //Calculate air resistance force and deceleration
+        let velocity = Math.sqrt(this.hVelocity**2 + this.vVelocity**2 + this.zVelocity**2);
+        let airResistance = 0.5 * Physics.airDensity * (Math.PI * Ball.radius**2) * Math.pow(velocity, 2);
+        let acceleration = airResistance/Ball.mass;
+
+        let velocity2d = Math.sqrt(this.hVelocity**2 + this.vVelocity**2);
+        let theta = Math.atan2(this.vVelocity, this.hVelocity);
+
+        let deltaDist = velocity2d * time - 0.5 * acceleration * time**2;
+        let deltaX = deltaDist * Math.cos(theta);
+        let deltaY = deltaDist * Math.sin(theta);
+
+        let x = this.x + deltaX;
+        let y = this.y + deltaY;
+
+        ctx.beginPath();
+        ctx.fillStyle = 'red';
+        ctx.arc(mScale*x + courtOffset.x, mScale*y + courtOffset.y, 5, 0, 2*Math.PI);
+        ctx.fill();
+
+        if(x > 0 && x < cDim.x && y > 0 && y < cDim.y) {
+            return true;
+        }
+        return false;
+    }
+
     draw() {
         ctx.fillStyle = 'rgb(204, 255, 0)';
         ctx.strokeStyle = 'black';
