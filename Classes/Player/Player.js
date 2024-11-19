@@ -12,6 +12,12 @@ class Player {
         this.num == 0 ? this.oppNum = 1 : this.oppNum = 0;
         this.x = cDim.x/2;
         this.ai = false;
+        this.strideDist = 0;
+        this.maxStrideDist = 5; //m
+        this.hitAnimation = {
+            hand: undefined,
+            time: 0
+        }
         if(num == 0) {
             this.keybinds = {
                 up: 'w',
@@ -38,7 +44,7 @@ class Player {
             this.y = cDim.y*3/4;
             this.directionCorrect = 1;
         }
-        this.width = 0.75;
+        this.width = 1;
         this.height = 0.75;
         this.hVelocity = 0;
         this.vVelocity = 0;
@@ -179,10 +185,20 @@ class Player {
                 this.windingUp = undefined;
             }
         } else this.aiDesiredAngle = undefined;
+
+        if(this.hitAnimation.hand != undefined) {
+            this.hitAnimation.time += potentialDeltaTime;
+            if(this.hitAnimation.time > 1.77245/2) {
+                this.hitAnimation.hand = undefined;
+                this.hitAnimation.time = 0;
+            }
+        }
     }
 
     move() {
         let oldKeyboard = JSON.parse(JSON.stringify(keyboard));
+        const OGX = this.x;
+        const OGY = this.y;
 
         //Lets the ai manipulate the `keyboard` object (this is reset later)
         if(this.ai) this.setMoveKeys();
@@ -244,13 +260,19 @@ class Player {
         this.x += this.hVelocity*deltaTime;
         this.y += this.vVelocity*deltaTime;
 
+        let dx = Math.abs(this.x-OGX);
+        let dy = Math.abs(this.y-OGY);
+        let distance = Math.sqrt(dx**2 + dy**2);
+        this.strideDist += distance % this.maxStrideDist;
+
         keyboard = oldKeyboard;
     }
 
     swing(swingSpeed, angle, type) {
+        this.hitAnimation.hand = Math.sign(this.x - Ball.ball.x) * this.directionCorrect;
         let racketMomentumVector = swingSpeed * Physics.racketMass;
         let dy = Math.abs(Math.abs(this.y)-cDim.y/2);
-        let dz = 1.5*Physics.netHeight * (dy/(cDim.y/2)) * (1.2**(-swingSpeed+15)+0.65);
+        let dz = (2*Physics.netHeight-Ball.ball.z) * (dy/(cDim.y/2)) * (1.13**(-swingSpeed+15)+0.6);
         let zAngle = Math.atan2(dz, dy);
         let racketMomentum2D = Math.cos(zAngle) * racketMomentumVector;
         let racketMomentum = {
@@ -344,7 +366,46 @@ class Player {
     }
 
     draw() {
+        let sizeFactor = 1.05+Math.sin(this.strideDist*2*Math.PI/this.maxStrideDist)/20;
+        let angle = Math.PI/3.2;
+        const ogAngle = angle;
+        if(this.hitAnimation.hand != undefined) {
+            angle += Math.PI*0.75*Math.sin((2*this.hitAnimation.time-1.77245)**2);
+        }
+        let angleToUse = angle;
+        if(this.hitAnimation.hand == -1) {
+            angleToUse = ogAngle;
+        }
+        let leftHand = {
+            x: this.x - this.width*0.6*Math.cos(angleToUse) * this.directionCorrect,
+            y: this.y - this.height*0.6*Math.sin(angleToUse) * this.directionCorrect
+        }
+
+        angleToUse = angle;
+        if(this.hitAnimation.hand == 1) {
+            angleToUse = ogAngle;
+        }
+        let rightHand = {
+            x: this.x + this.width*0.6*Math.cos(angleToUse) * this.directionCorrect,
+            y: this.y - this.height*0.6*Math.sin(angleToUse) * this.directionCorrect
+        }
         ctx.fillStyle = 'rgb(255, 255, 255)';
-        ctx.fillRect(mScale * (this.x - this.width/2)+courtOffset.x, mScale*(this.y - this.height/2)+courtOffset.y, mScale*this.width, mScale*this.height);
+        ctx.strokeStyle = 'rgb(200, 200, 200)';
+        ctx.lineWidth = 2;
+        Canvas.circle(leftHand.x*mScale + courtOffset.x, leftHand.y*mScale + courtOffset.y, this.width/5*mScale*sizeFactor, true);
+        Canvas.circle(rightHand.x*mScale + courtOffset.x, rightHand.y*mScale + courtOffset.y, this.width/5*mScale*sizeFactor, true);
+        ctx.lineWidth = 3;
+        Canvas.circle(this.x*mScale + courtOffset.x, this.y*mScale + courtOffset.y, this.width/2*mScale*sizeFactor, true);
+
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = 'rgb(0, 0, 0)';
+        angleToUse = angle - ogAngle - Math.PI/12;
+        if(Ball.ball && (this.x - Ball.ball.x) * this.directionCorrect > 0) {
+            Canvas.line(leftHand.x*mScale + courtOffset.x, leftHand.y*mScale + courtOffset.y, (leftHand.x+(-1.2*this.directionCorrect)*Math.cos(angleToUse))*mScale + courtOffset.x, (leftHand.y+(-1.2*this.directionCorrect)*Math.sin(angleToUse))*mScale + courtOffset.y, true);
+        } else {
+            Canvas.line(rightHand.x*mScale + courtOffset.x, rightHand.y*mScale + courtOffset.y, (rightHand.x-(-1.2*this.directionCorrect)*Math.cos(angleToUse))*mScale + courtOffset.x, (rightHand.y+(-1.2*this.directionCorrect)*Math.sin(angleToUse))*mScale + courtOffset.y, true);
+        }
+
+
     }
 }
