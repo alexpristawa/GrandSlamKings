@@ -1,3 +1,7 @@
+window.onerror = function (message, source, lineno, colno, error) {
+    alert(`An error occurred: ${message}`);
+};
+
 const root = document.querySelector(':root');
 const body = document.querySelector('body');
 const canvas = document.getElementById('canvas');
