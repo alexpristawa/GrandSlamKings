@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="homeScreen.css" rel="stylesheet" type="text/css" />
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -15,65 +16,181 @@
         @import url('https://fonts.googleapis.com/css2?family=Train+One&display=swap'); /* font-family: 'Train One', system-ui; */
         @import url('https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap'); /* font-family: "Bree Serif", serif; */
         @import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap'); /* font-family: "Exo 2", sans-serif; */
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); /* font-family: 'Kanit', sans-serif; */
     </style>
-    <title>Document</title>
+    <title>Tennis</title>
 </head>
 <body>
 
-    <div id = 'modes'>
-        <div onclick = 'new Game(1)'>1 Player Mode</div>
-        <div onclick = 'new Game(2)'>2 Player Mode</div>
-    </div>
+    <template id = 'characterTemplate'>
+        <img>
+        <div class = 'name'></div>
+        <div class = 'stats inactive'>
+            <div>Stats</div>
+            <div class = 'stat speed'><span>Speed</span> </div>
+            <div class = 'stat power'><span>Power</span> </div>
+            <div class = 'stat accuracy'><span>Accuracy</span> </div>
+            <div class = 'stat technique'><span>Technique</span></div>
+            <div class = 'ability'>
+                <h5></h5>
+                <span></span>
+            </div>
+        </div>
+        <div class = 'cost'>
+            <div>
+                <img src="Images/coin.png">
+                <span></span>
+            </div>
+        </div>
+    </template>
 
-    <div id = 'shotType'>
+    <template id = 'challengeTemplate'>
+        <div class = 'main'>
+            <checkbox><div></div></checkbox>
+            <div class = 'name'></div>
+            <div class = 'coinHolder'>
+                <img src="Images/coin.png">
+                <span class = 'reward'></span>
+            </div>
+        </div>
+        <div class = 'statBarHolder'>
+            <statBar><div></div></statBar>
+        </div>
+    </template>
 
-    </div>
+    <screen id = 'homeScreen'>
+        <div class = 'top'>
+            <div>
 
-    <div id = 'scoreboard'>
-        <div class = 'bar'></div>
-        <div class = 'names'>
-            <div>Player 1</div>
-            <div>Player 2</div>
+            </div>
+            <div class = 'title'>
+                <div class="cylinder-title">Grand&nbsp;Slam&nbsp;Kings</div>
+            </div>
+            <div class = 'coinsHolder'>
+                <div class = 'coinDiv'>
+                    <img src="Images/coin.png">
+                    <span>0</span>
+                </div>
+            </div>
         </div>
-        <div class = 'serving'>
-            <div>&lt;</div>
-            <div>&lt;</div>
-        </div>
-        <div class = 'sets'>
-            <div>0</div>
-            <div>0</div>
-        </div>
-        <div class = 'games'>
-            <div>0</div>
-            <div>0</div>
-        </div>
-        <div class = 'points'>
-            <div>0</div>
-            <div>0</div>
-        </div>
-    </div>
+        <div class = 'm1'>
+            <div class = 'shop'>
 
-    <div id = 'exclamation'>
-        <div class = 'bigText'></div>
-        <div class = 'smallText'></div>
-    </div>
+            </div>
+            <div class = 'characters'>
+                <div class = 'title'>Characters</div>
+                <div class = 'characterSlider'></div>
+            </div>
+            <div class = 'tournaments'>
 
-    <div id = 'ballAltitude'>
-        <div class = 'rectangle'></div>
-        <div class = 'target'>
-            <div></div>
-            <div></div>
-            <div></div>
+            </div>
         </div>
-    </div>
-    
-    <canvas id="canvas"></canvas>
+        <div class = 'm1 m2'>
+            <div class = 'challenges'>
+                <div class = 'title'>Challenges</div>
+                <div class = 'middle'>
+                    <div class = 'daily'>
+                        <div class = 'title'>Daily</div>
+                        <div class = 'challengeHolder'></div>
+                    </div>
+                    <div class = 'weekly'>
+                        <div class = 'title'>Weekly</div>
+                        <div class = 'challengeHolder'></div>
+                    </div>
+                </div>
+            </div>
+            <div class = 'exhibition'>
+                <div class = 'title'>Exhibition</div>
+                <div class = 'opponents characterSlider'></div>
+                <div class = 'bottomDiv'>
+                    <div class = 'setDiv'>
+                        <div>
+                            <div>Sets to win</div>
+                            <div><button>1</button><button>2</button><button class = 'selected'>3</button></div>
+                        </div>
+                    </div>
+                    <div class = 'startDiv'>
+                        <button id = 'startButton' onclick = 'HomeScreen.newExhibition()'>New Match</button>
+                    </div>
+                    <div class = 'rewardDiv'>
+                        <div>
+                            <div>
+                                <div>Win</div>
+                                <div><img src="Images/coin.png"><span>300</span></div>
+                            </div>
+                            <div>
+                                <div>Loss</div>
+                                <div><img src="Images/coin.png"><span>60</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class = 'achievements'>
+
+            </div>
+        </div>
+    </screen>
+
+    <screen id="gameScreen">
+        <div id = 'shotType'>
+
+        </div>
+
+        <div id = 'scoreboard'>
+            <div class = 'bar'></div>
+            <div class = 'names'>
+                <div>Player 1</div>
+                <div>Player 2</div>
+            </div>
+            <div class = 'serving'>
+                <div>&lt;</div>
+                <div>&lt;</div>
+            </div>
+            <div class = 'sets'>
+                <div>0</div>
+                <div>0</div>
+            </div>
+            <div class = 'games'>
+                <div>0</div>
+                <div>0</div>
+            </div>
+            <div class = 'points'>
+                <div>0</div>
+                <div>0</div>
+            </div>
+        </div>
+
+        <div id = 'exclamation'>
+            <div class = 'bigText'></div>
+            <div class = 'smallText'></div>
+        </div>
+
+        <div id = 'ballAltitude'>
+            <div class = 'rectangle'></div>
+            <div class = 'target'>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        
+        <canvas id="canvas"></canvas>
+    </screen>
 
     <script src="Classes/Ball/Ball.js"></script>
     <script src="Classes/Game/Game.js"></script>
+    <script src="Classes/HomeScreen/Challenge/Challenge.js"></script>
+    <script src="Classes/HomeScreen/Challenge/DailyChallenge.js"></script>
+    <script src="Classes/HomeScreen/Challenge/Stat.js"></script>
+    <script src="Classes/HomeScreen/Challenge/WeeklyChallenge.js"></script>
+    <script src="Classes/HomeScreen/CharacterSlider.js"></script>
+    <script src="Classes/HomeScreen/HomeScreen.js"></script>
     <script src="Classes/Physics/Physics.js"></script>
     <script src="Classes/Player/Player.js"></script>
     <script src="Classes/Player/Ai.js"></script>
+    <script src="Classes/Achievements.js"></script>
+    <script src="Classes/StorageManager.js"></script>
     <script src="Classes/Render/Render.js"></script>
     <script src="Scripts/animationFunctions.js"></script>
     <script src="Scripts/Canvas.js"></script>

@@ -7,9 +7,10 @@ class Player {
     static headHeight = 0.3;
     static centerToShoulder = 0.25;
 
-    constructor(num) {
+    constructor(num, obj) {
         this.num = num;
         this.num == 0 ? this.oppNum = 1 : this.oppNum = 0;
+        this.info = obj;
         this.x = cDim.x/2;
         this.ai = false;
         this.strideDist = 0;
@@ -48,15 +49,15 @@ class Player {
         this.height = 0.75;
         this.hVelocity = 0;
         this.vVelocity = 0;
-        this.maxVelocity = 3.658; //Cover horizontal distance in 2.25 seconds
+        this.maxVelocity = 3 + 0.658 *  this.info.stats.speed; //Cover horizontal distance in 2.25 seconds
         this.maxAcceleration = this.maxVelocity*4;
         this.windingUp = undefined;
         this.fastestSwing = 50;
     }
 
-    static instantiate(players) {
-        Player.players[0] = new Player(0);
-        players == 1 ? Player.players[1] = new Ai(1) : Player.players[1] = new Player(1);
+    static instantiate(numPlayers, players) {
+        Player.players[0] = new Player(0, players[0]);
+        numPlayers == 1 ? Player.players[1] = new Ai(1, players[1]) : Player.players[1] = new Player(1, players[1]);
         Player.players[0].opp = Player.players[1];
         Player.players[1].opp = Player.players[0];
     }
@@ -106,6 +107,7 @@ class Player {
                 keys.forEach(key => {
                     keyboardQueries[key] = () => {
                         let serveType = getKeyByValue(this.keybinds, key);
+                        Stat.updateStats('hit', {hitType: 'serve'}); //Updates the stats based on ball hits
                         Physics.serveCollision(Ball.ball, serveType);
                         for(let i = 0; i < keys.length; i++) {
                             keyboardQueries[keys[i]] = undefined;
@@ -126,8 +128,8 @@ class Player {
         if(Game.game.receiving == this.num && Ball.ball != undefined) {
 
             //Runs if the player can reach the ball
-            if((this.x-Ball.ball.x)**2 + (this.y-Ball.ball.y)**2 < (Player.shoulderToRacket + Player.centerToShoulder)**2) {
-                let dy = this.directionCorrect * (this.y - Ball.ball.y);
+            if((this.x-Ball.ball.x)**2 + (this.y-this.width/2*this.directionCorrect-Ball.ball.y)**2 < (Player.shoulderToRacket + Player.centerToShoulder)**2) {
+                let dy = this.directionCorrect * (this.y-this.width/2*this.directionCorrect - Ball.ball.y);
                 let dx = Ball.ball.x - this.x;
                 let angle = Math.atan2(dy, dx);
                 if(Math.abs(dx) > this.width/3 || dy < 0) {
@@ -170,8 +172,8 @@ class Player {
                     //If the key is no longer being held, it hits the ball
                     if(!keyboard[this.getHitKey()]) {
                         this.swing(this.windingUp*60, angle, type);
-                    } else if(this.windingUp > 0.5) { //If you've been holding down for over half a second, it swings with maximum power
-                        this.swing(30, angle, type);
+                    } else if(this.windingUp > 0.35 + 0.15 * this.info.stats.power) { //If you've been holding down for over half a second, it swings with maximum power
+                        this.swing(15 + 15 * this.info.stats.power, angle, type);
                     }
                     //Displays more power
                     lineDistance += this.windingUp*10;
@@ -269,10 +271,13 @@ class Player {
     }
 
     swing(swingSpeed, angle, type) {
+        angle += (Math.random() * Math.PI/20 - Math.PI/40) * (2-this.info.stats.accuracy);
         this.hitAnimation.hand = Math.sign(this.x - Ball.ball.x) * this.directionCorrect;
+        this.hitAnimation.swingSpeed = swingSpeed;
         let racketMomentumVector = swingSpeed * Physics.racketMass;
         let dy = Math.abs(Math.abs(this.y)-cDim.y/2);
-        let dz = (2*Physics.netHeight-Ball.ball.z) * (dy/(cDim.y/2)) * (1.13**(-swingSpeed+15)+0.6);
+        //let dz = Math.max(1.5*Physics.netHeight-Ball.ball.z + 3*2**(-dy) - (swingSpeed-10)/50 + 10*1.25**(-swingSpeed), 0);
+        let dz = (2*Physics.netHeight-Ball.ball.z) * (dy/(cDim.y/2)) * (1.17**(-swingSpeed+15)+0.5 - 0.003*swingSpeed);
         let zAngle = Math.atan2(dz, dy);
         let racketMomentum2D = Math.cos(zAngle) * racketMomentumVector;
         let racketMomentum = {
@@ -287,6 +292,14 @@ class Player {
             /*z: Ball.mass * Ball.ball.zVelocity*/
             z: 0
         };
+
+        if(Math.abs(this.y - cDim.y/2) < 4) {
+            ballMomentum.y = 0;
+            ballMomentum.x = 0;
+            racketMomentum.z = Physics.netHeight-Ball.ball.z*3;
+            racketMomentum.y = racketMomentum.y/swingSpeed*20;
+            racketMomentum.x = racketMomentum.x/swingSpeed*20;
+        }
         
         ballMomentum.x += racketMomentum.x/4;
         ballMomentum.y += racketMomentum.y/4;
@@ -294,8 +307,8 @@ class Player {
 
         if(Ball.ball.z > 2) {
             let p = Ball.ball.z/dy;
-            ballMomentum.z = -ballMomentum.y * p;
-            ballMomentum.y *= 4;
+            ballMomentum.z = -ballMomentum.y * p/2;
+            ballMomentum.y *= 2;
             Ball.ball.xAngularVelocity = 0;
         }
 
@@ -304,6 +317,7 @@ class Player {
         Ball.ball.zVelocity = ballMomentum.z/Ball.mass;
 
         this.windingUp = undefined;
+        Stat.updateStats('hit', {hitType: type, wasVolley: Game.game.bounceCount==0}); //Updates the stats based on ball hits
         Game.game.bounceCount = 0;
         Game.game.receiving = this.oppNum;
 
@@ -370,7 +384,7 @@ class Player {
         let angle = Math.PI/3.2;
         const ogAngle = angle;
         if(this.hitAnimation.hand != undefined) {
-            angle += Math.PI*0.75*Math.sin((2*this.hitAnimation.time-1.77245)**2);
+            angle += (this.hitAnimation.swingSpeed/30)**0.5*Math.PI*0.75*Math.sin((2*this.hitAnimation.time-1.77245)**2);
         }
         let angleToUse = angle;
         if(this.hitAnimation.hand == -1) {
@@ -378,7 +392,7 @@ class Player {
         }
         let leftHand = {
             x: this.x - this.width*0.6*Math.cos(angleToUse) * this.directionCorrect,
-            y: this.y - this.height*0.6*Math.sin(angleToUse) * this.directionCorrect
+            y: this.y - this.width*0.6*Math.sin(angleToUse) * this.directionCorrect
         }
 
         angleToUse = angle;
@@ -387,7 +401,7 @@ class Player {
         }
         let rightHand = {
             x: this.x + this.width*0.6*Math.cos(angleToUse) * this.directionCorrect,
-            y: this.y - this.height*0.6*Math.sin(angleToUse) * this.directionCorrect
+            y: this.y - this.width*0.6*Math.sin(angleToUse) * this.directionCorrect
         }
         ctx.fillStyle = 'rgb(255, 255, 255)';
         ctx.strokeStyle = 'rgb(200, 200, 200)';

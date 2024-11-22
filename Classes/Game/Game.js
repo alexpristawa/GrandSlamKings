@@ -2,12 +2,13 @@ class Game {
 
     static game = null;
     static scoreArr = [0, 15, 30, 40, 45, 50];
+    static winReward = 300;
+    static setsToWin = 3;
 
-    constructor(players) {
-        Player.instantiate(players);
-        ballAltitudeDiv.style.display = 'flex';
-        document.querySelector('#scoreboard').style.display = 'flex';
-        document.querySelector('#modes').style.display = 'none';
+    constructor(numPlayers, players) {
+        Player.instantiate(numPlayers, players);
+
+        this.difficulty = players[1].name.toLowerCase();
 
         Game.game = this;
         this.score = [
@@ -35,9 +36,14 @@ class Game {
     newSet(playerNum) {
         if(playerNum != undefined) {
             this.score[playerNum].sets++;
-            if(this.score[playerNum].sets == 3) {
-                this.exclamationMessage = 'Game, Set, Match!';
+            Stat.updateStats("set", {difficulty: this.difficulty, won: playerNum == 0});
+            StorageManager.resetRecord('set');
+            if(this.score[playerNum].sets == Game.setsToWin) {
+                Stat.updateStats("match", {difficulty: this.difficulty, won: playerNum == 0});
+                StorageManager.resetRecord('match');
+                this.exclamationMessage = playerNum == 0 ? 'You Won!':'You Lost!';
                 this.updateMessage();
+                return;
             } else {
                 this.score[0].gameScores.push(this.score[0].games);
                 this.score[1].gameScores.push(this.score[1].games);
@@ -55,6 +61,8 @@ class Game {
     newGame(playerNum) {
         if(playerNum != undefined) {
             this.score[playerNum].games++;
+            Stat.updateStats("game", {difficulty: this.difficulty, won: playerNum == 0});
+            StorageManager.resetRecord('game');
             if(this.score[playerNum].games == 6) {
                 if(this.score[Math.abs(playerNum-1)].games < 5) {
                     this.newSet(playerNum);
@@ -66,9 +74,9 @@ class Game {
         scoreboard.games[0].innerHTML = this.score[0].games;
         scoreboard.games[1].innerHTML = this.score[1].games;
 
-        this.serving == 0 ? this.serving = 1 : this.serving = 0;
-        scoreboard.serving[this.serving].style.display = 'flex';
-        scoreboard.serving[Math.abs(this.serving-1)].style.display = 'none';
+        this.serving = this.serving == 0 ? 1:0;
+        scoreboard.serving[this.serving].style.opacity = '1';
+        scoreboard.serving[Math.abs(this.serving-1)].style.opacity = '0';
         this.servingSide = 'deuce';
         this.exclamationMessage = 'New Game!';
         this.score[0].points = 0;
@@ -80,6 +88,8 @@ class Game {
     newPoint(playerNum) {
         if(playerNum != undefined) {
             this.score[playerNum].points++;
+            Stat.updateStats("point", {difficulty: this.difficulty, won: playerNum == 0});
+            StorageManager.resetRecord("point");
             if(this.score[playerNum].points == 5) {
                 this.newGame(playerNum);
                 return;
@@ -108,12 +118,27 @@ class Game {
         div.fadeIn(250, 'flex');
         let bigDiv = document.querySelector('#exclamation > div:nth-child(1');
         bigDiv.innerHTML = this.exclamationMessage;
-        if(this.exclamationMessage == 'Out!') {
+        if(this.exclamationMessage == 'Out!' || this.exclamationMessage == 'You Lost!') {
             bigDiv.style.color = 'red';
+        } else if(this.exclamationMessage == 'You Won!') {
+            bigDiv.style.color = 'green';
         } else {
             bigDiv.style.color = 'white';
         }
-        let smallDiv = document.querySelector('#exclamation > div:nth-child(2');
+
+        let smallDiv = document.querySelector('#exclamation > div:nth-child(2)');
+        let coins = this.exclamationMessage == "You Won!" ? Game.winReward:Math.floor(Game.winReward/5);
+        if(['You Won!', 'You Lost!'].includes(this.exclamationMessage)) {
+            smallDiv.innerHTML = `<img src="Images/coin.png"><span>${coins}</span>`;
+            setTimeout(() => {
+                document.querySelector('screen#gameScreen').fadeOut(1000, false);
+                document.querySelector('screen#homeScreen').fadeIn(1000, 'flex');
+                setTimeout(() => {
+                    StorageManager.incrementCoins(coins);
+                }, 1000);
+            }, 2000);
+            return;
+        }
         smallDiv.innerHTML = `${Game.scoreArr[this.score[this.serving].points]}-${Game.scoreArr[this.score[Math.abs(this.serving-1)].points]}`;
 
         ms -= 500;

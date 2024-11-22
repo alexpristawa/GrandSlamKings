@@ -1,7 +1,7 @@
 class Ai extends Player {
 
-    constructor(num) {
-        super(num);
+    constructor(num, obj) {
+        super(num, obj);
         this.ai = true;
     }
 
@@ -44,7 +44,7 @@ class Ai extends Player {
                 }
             } else {
                 //If the other player is receiving, move to the center of the court
-                if(this.x > cDim.x*0.55) {
+                if(this.x > cDim.x*0.55 + cDim.x*0.15*(2-this.info.stats.technique)) {
                     keyboard[this.keybinds.left] = true;
                 } else if(this.x < cDim.x*0.45) {
                     keyboard[this.keybinds.right] = true;
@@ -59,7 +59,7 @@ class Ai extends Player {
     }
 
     getHitKey() {
-        let dy = this.directionCorrect * (this.y - Ball.ball.y);
+        let dy = this.directionCorrect * (this.y - this.width/2*this.directionCorrect - Ball.ball.y);
         let dx = Ball.ball.x - this.x;
         let angle = Math.atan2(dy, dx);
 
@@ -76,7 +76,6 @@ class Ai extends Player {
             let dy = this.y - this.opp.y;
             let x1 = dy/slope1 + this.x;
             let x2 = dy/slope2 + this.x;
-            console.log(x1, x2, this.opp.x);
             let dx1 = Math.abs(x1 - this.opp.x);
             let dx2 = Math.abs(x2 - this.opp.x);
             if(dx1 < dx2) {

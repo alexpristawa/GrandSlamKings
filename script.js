@@ -13,6 +13,15 @@ const scoreboard = {
     points: [document.querySelector('#scoreboard > .points > div:nth-child(1)'), document.querySelector('#scoreboard > .points > div:nth-child(2)')]
 }
 
+let seededRandom = (seed, multiplier = 0) => {
+    multiplier++;
+    return Math.acos(Math.sin(Math.floor(seed)**(Math.E * multiplier)))/(1.5*Math.PI);
+}
+
+let storageObj = {};
+
+StorageManager.getStorageObj();
+
 let frame = {
     windowWidth: window.innerWidth,
     windowHeight: window.innerHeight
@@ -73,9 +82,41 @@ document.addEventListener('keyup', (event) => {
     }
 });
 
+{
+    function blendColors(color1, color2, ratio) {
+        // Ensure the ratio is clamped between 0 and 1
+        ratio = Math.max(0, Math.min(1, ratio));
+    
+        // Calculate the blended RGB values
+        const r = Math.round(color1[0] + (color2[0] - color1[0]) * ratio);
+        const g = Math.round(color1[1] + (color2[1] - color1[1]) * ratio);
+        const b = Math.round(color1[2] + (color2[2] - color1[2]) * ratio);
+    
+        // Return the resulting color as a string
+        return `rgb(${r},${g},${b})`;
+    }
+
+    let div = document.querySelector('.cylinder-title');
+    let text = div.textContent;
+    div.innerHTML = '';
+    for(let i = 0; i < text.length; i++) {
+        let span = document.createElement('span');
+        for(let j = 0; j < 20; j++) {
+            let s = document.createElement('span');
+            s.innerHTML = text[i];
+            s.style.transform = `rotateY(${30 - 2 * i / text.length * 30}deg) rotateX(10deg) translateZ(${j}px)`;
+            s.style.zIndex = 1000 - j;
+            s.style.color = blendColors([186, 150, 49], [102, 98, 48], j/20);
+            span.appendChild(s);
+        }
+        div.appendChild(span);
+    }
+}
+
 // Call the function with the canvas and context
 adjustCanvas(canvas, ctx);
 Render.instantiate();
+HomeScreen.instantiate();
 
 let gameFunction = () => {
     if(previousTime == undefined) {
@@ -91,7 +132,7 @@ let gameFunction = () => {
         requestAnimationFrame(gameFunction);
         return;
     }
-    if(Game.game.receiving != undefined && Ball.ball != undefined && (Player.players[Game.game.receiving].x - Ball.ball.x)**2 + (Player.players[Game.game.receiving].y - Ball.ball.y)**2 < (Player.shoulderToRacket + Player.centerToShoulder)**2 * 2) {
+    if(Game.game.receiving != undefined && Ball.ball != undefined && (Player.players[Game.game.receiving].x - Ball.ball.x)**2 + ((Player.players[Game.game.receiving].y-Player.players[Game.game.receiving].width/2*Player.players[Game.game.receiving].directionCorrect) - Ball.ball.y)**2 < (Player.shoulderToRacket + Player.centerToShoulder)**2 * 2) {
         deltaTime /= 7.5;
         if(Player.players[Game.game.receiving].windingUp != undefined) {
             deltaTime = 0;
@@ -130,3 +171,7 @@ let gameFunction = () => {
 
     requestAnimationFrame(gameFunction);
 }
+
+storageObj.loginInfo.day = Challenge.getDay();
+storageObj.loginInfo.week = Challenge.getWeek();
+StorageManager.save();
