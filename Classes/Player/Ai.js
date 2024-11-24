@@ -14,7 +14,7 @@ class Ai extends Player {
      */
     setMoveKeys() {
         //If the AI is receiving, move based on the ball
-        if(Game.game.receiving == this.num) {
+        if(Match.point.receiving == this.num) {
             let baseline = cDim.y;
             let factor = (baseline-Ball.ball.y) / Ball.ball.vVelocity;
             let x = Ball.ball.x + Ball.ball.hVelocity * factor;
@@ -37,9 +37,9 @@ class Ai extends Player {
                 keyboard[this.keybinds.down] = true;
             }
         } else {
-            if(Game.game.receiving == undefined) {
+            if(Match.point.receiving == undefined) {
                 //Checks if the AI is serving
-                if(Game.game.serving == this.num) {
+                if(Match.game.serving == this.num) {
                     this.serveMechanics();
                 }
             } else {
@@ -78,10 +78,21 @@ class Ai extends Player {
             let x2 = dy/slope2 + this.x;
             let dx1 = Math.abs(x1 - this.opp.x);
             let dx2 = Math.abs(x2 - this.opp.x);
+            let angles = [Math.atan2(this.y, -this.x) + Math.PI/2 * fix, Math.atan2(this.y, cDim.x-this.x) + Math.PI/2 * fix];
             if(dx1 < dx2) {
                 this.aiDesiredAngle = Math.atan2(this.y, cDim.x-this.x) + Math.PI/2 * fix
             } else {
                 this.aiDesiredAngle = Math.atan2(this.y, -this.x) + Math.PI/2 * fix
+            }
+            if(angles[1] > angles[0]) {
+                let temp = angles[0];
+                angles[0] = angles[1];
+                angles[1] = temp;
+            }
+            if(Math.random()*2 > this.info.stats.technique) {
+                let midAngle = (angles[0] + angles[1])/2;
+                let dA = angles[0] - midAngle;
+                this.aiDesiredAngle = (Math.random()-0.5)*dA + midAngle;
             }
             if(this.aiDesiredAngle > Math.PI) {
                 this.aiDesiredAngle -= 2*Math.PI;

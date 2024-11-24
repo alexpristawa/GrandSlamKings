@@ -1,7 +1,3 @@
-window.onerror = function (message, source, lineno, colno, error) {
-    alert(`An error occurred: ${message}`);
-};
-
 const root = document.querySelector(':root');
 const body = document.querySelector('body');
 const canvas = document.getElementById('canvas');
@@ -10,6 +6,7 @@ const ballAltitudeDiv = document.getElementById('ballAltitude');
 const ballAltitudeMeter = document.querySelector('#ballAltitude > .rectangle');
 const ballAltitudeTarget = document.querySelector('#ballAltitude > .target');
 const shotType = document.getElementById('shotType');
+let hasOnErrorFunction = false;
 const scoreboard = {
     serving: [document.querySelector('#scoreboard > .serving > div:nth-child(1)'), document.querySelector('#scoreboard > .serving > div:nth-child(2)')],
     sets: [document.querySelector('#scoreboard > .sets > div:nth-child(1)'), document.querySelector('#scoreboard > .sets > div:nth-child(2)')],
@@ -76,6 +73,16 @@ document.addEventListener('keydown', (event) => {
     } else {
         keyboard[event.key] = true;
     }
+
+    if(event.key == 'D' && (event.ctrlKey || event.metaKey)) {
+        event.preventDefault();
+        if(!hasOnErrorFunction) {
+            window.onerror = function (message, source, lineno, colno, error) {
+                alert(`An error occurred: ${message}`);
+            };
+        }
+        hasOnErrorFunction = true;
+    }
 });
 
 document.addEventListener('keyup', (event) => {
@@ -136,9 +143,9 @@ let gameFunction = () => {
         requestAnimationFrame(gameFunction);
         return;
     }
-    if(Game.game.receiving != undefined && Ball.ball != undefined && (Player.players[Game.game.receiving].x - Ball.ball.x)**2 + ((Player.players[Game.game.receiving].y-Player.players[Game.game.receiving].width/2*Player.players[Game.game.receiving].directionCorrect) - Ball.ball.y)**2 < (Player.shoulderToRacket + Player.centerToShoulder)**2 * 2) {
+    if(Match.point.receiving != undefined && Ball.ball != undefined && (Player.players[Match.point.receiving].x - Ball.ball.x)**2 + ((Player.players[Match.point.receiving].y-Player.players[Match.point.receiving].width/2*Player.players[Match.point.receiving].directionCorrect) - Ball.ball.y)**2 < (Player.shoulderToRacket + Player.centerToShoulder)**2 * 2) {
         deltaTime /= 7.5;
-        if(Player.players[Game.game.receiving].windingUp != undefined) {
+        if(Player.players[Match.point.receiving].windingUp != undefined) {
             deltaTime = 0;
         }
     }

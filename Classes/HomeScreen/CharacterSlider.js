@@ -130,6 +130,8 @@ class CharacterSlider {
             div.innerHTML = document.querySelector('template#characterTemplate').innerHTML;
             div.style.display = 'flex';
             div.querySelector('img').src = `Images/Characters/${character.name}${character.lastName}.png`;
+            character.img = new Image();
+            character.img.src = `Images/Characters/${character.name}${character.lastName}${character.imgsrc=="Default" ? "":"Headshot"}.png`;
             if(character.imgsrc == 'Default') {
                 div.querySelector('img').style.height = '40%';
                 div.querySelector('img').style.marginTop = '30%';
@@ -181,7 +183,7 @@ class CharacterSlider {
                             }
                         });
                     }
-                    HomeScreen.updateRewards(Game.setsToWin);
+                    HomeScreen.updateRewards(Match.setsToWin);
                 } else {
                     if(character.cost <= storageObj.coins) {
                         character.unlocked = true;

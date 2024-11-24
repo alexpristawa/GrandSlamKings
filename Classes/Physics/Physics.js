@@ -57,9 +57,9 @@ class Physics {
             let frictionalForce = Physics.groundMu * N;
             let frictionalImpulse = frictionalForce * deltaTime;
             let percentThatGetsTransferred = 0.5;
-            let receiver = Game.game.receiving;
+            let receiver = Match.point.receiving;
             if(receiver == undefined) {
-                receiver = Math.abs(Game.game.serving-1);
+                receiver = Math.abs(Match.game.serving-1);
             }
             ball.vVelocity -= 0.15 * /*Player.players[receiver].directionCorrect */ ball.xAngularVelocity * percentThatGetsTransferred;
 
@@ -67,7 +67,7 @@ class Physics {
             ball.yAngularVelocity *= 0.8;
             ball.zAngularVelocity *= 0.8;
         
-            if(!ball.contactingGround) Game.game.ballBounce();
+            if(!ball.contactingGround) Match.point.ballBounce();
             ball.contactingGround = true;
             ball.zVelocity = Math.min(20, ball.zVelocity)
         } else if(ball.contactingGround) {
@@ -77,8 +77,8 @@ class Physics {
     }
 
     static serveCollision(ball, type) {
-        if(Player.players[Game.game.serving].alreadyTried) return;
-        let servingPlayer = Player.players[Game.game.serving];
+        if(Player.players[Match.game.serving].alreadyTried) return;
+        let servingPlayer = Player.players[Match.game.serving];
         let highestHeight = Player.heightToShoulder+Player.shoulderToRacket;
         let lowestHeight = highestHeight - Player.headHeight*4;
         let factor = ((ball.z-lowestHeight)/(highestHeight-lowestHeight));
@@ -94,7 +94,7 @@ class Physics {
                 racketSwingSpeed = 25;
             }
         } else {
-            Player.players[Game.game.serving].alreadyTried = true;
+            Player.players[Match.game.serving].alreadyTried = true;
             shotType.innerHTML = "Miss!";
             setTimeout(() => {
                 shotType.fadeOut(250, false);

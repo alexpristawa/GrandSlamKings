@@ -91,7 +91,7 @@ class DailyChallenge extends Challenge {
         } else {
             div.querySelector('.name').innerHTML = this.description.replace('+n', this.n);
         }
-        div.querySelector('.reward').innerHTML = 100 + 200 * i;
+        div.querySelector('.reward').innerHTML = 50 + 100 * i;
 
         this.div = div;
         this.checkbox = div.querySelector('checkbox');

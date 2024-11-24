@@ -51,7 +51,7 @@ class Challenge {
             return;
         }
         if(this.description == "Win a receiving game without losing a point") {
-            if(check && Game.game.serving == 1 && Game.game.score[1].points == 0) {
+            if(check && Match.game.serving == 1 && Match.match.score[1].points == 0) {
                 this.complete();
             }
         } else if(this.description == "Win a point where the ball hits a racket exactly +n times") {
@@ -69,7 +69,7 @@ class Challenge {
             }
             this.statBar.style.width = Math.min(storageObj.record[this.time].wins.total.sets/this.n*100, 100) + '%';
         } else if(this.description == "Win a match best of 5 sets") {
-            if(check && Game.game.score[0].sets == 3) {
+            if(check && Match.match.score[0].sets == 3) {
                 this.complete();
             }
         } else if(this.description == "Win +n games") {
@@ -91,6 +91,22 @@ class Challenge {
             if(check && storageObj.record.match.losses.total.games == 0) {
                 this.complete();
             }
+        } else if(this.description == 'Log in on +n different days') {
+            if(check) {
+                if(!this.progress.includes(Challenge.getDay())) {
+                    this.progress.push(Challenge.getDay());
+                }
+                if(this.progress.length == this.n) this.complete();
+            }
+            this.statBar.style.width = Math.min(this.progress.length/this.n*100, 100) + '%';
+        } else if(this.description == 'Win a match on +n different days') {
+            if(check && storageObj.record["daily"].wins.total.matches > 0) {
+                if(!this.progress.includes(Challenge.getDay())) {
+                    this.progress.push(Challenge.getDay());
+                }
+                if(this.progress.length == this.n) this.complete();
+            }
+            this.statBar.style.width = Math.min(this.progress.length/this.n*100, 100) + '%';
         }
         localStorage.grandSlamKings = JSON.stringify(storageObj);
     }
@@ -105,7 +121,7 @@ class Challenge {
     }
 
     claimReward = (getCoins = true) => {
-        if(getCoins) StorageManager.incrementCoins((this.i * 200 + 100) * this.coinMultiplier);
+        if(getCoins) StorageManager.incrementCoins((this instanceof DailyChallenge ? this.i * 100 + 50 : this.i * 300 + 50) * this.coinMultiplier);
         this.div.querySelector('div.coinHolder').classList.remove('claimable');
         this.div.querySelector('div.coinHolder').removeEventListener('click', this.claimReward);
         this.div.classList.add('claimed');

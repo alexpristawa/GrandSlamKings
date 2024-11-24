@@ -22,7 +22,7 @@ class HomeScreen {
             });
         });
 
-        this.updateRewards(3);
+        this.updateRewards(1);
     }
 
     static newExhibition() {
@@ -30,20 +30,19 @@ class HomeScreen {
         let opponent = this.exhibitionSlider.selected;
         document.querySelector('#homeScreen').fadeOut(200, false);
         document.querySelector('#gameScreen').fadeIn(200, 'flex');
-        new Game(1, [player, opponent]);
+        new Match(1, [player, opponent]);
     }
 
     static updateRewards(i) {
         let opponent = this.exhibitionSlider.selected;
         let sumOfStats = 0;
         Object.keys(opponent.stats).forEach(key => {
-            console.log(opponent.stats[key]);
             if(!isNaN(opponent.stats[key])) sumOfStats += opponent.stats[key];
         });
-        Game.winReward = Math.round(i * 100 * (sumOfStats/4));
-        Game.setsToWin = i;
+        Match.winReward = Math.round(i * 100 * (sumOfStats/4));
+        Match.setsToWin = i;
         let spans = document.querySelectorAll('.rewardDiv span');
-        spans[0].innerHTML = Game.winReward;
-        spans[1].innerHTML = Math.round(Game.winReward/5);
+        spans[0].innerHTML = Match.winReward;
+        spans[1].innerHTML = Math.round(Match.winReward/5);
     }
 }

@@ -70,7 +70,7 @@ class Player {
     }
 
     serve() {
-        Game.game.bounceCount = 0;
+        Match.point.bounceCount = 0;
         Ball.ball = undefined;
         this.alreadyTried = false;
         ballAltitudeTarget.style.display = 'flex';
@@ -84,7 +84,7 @@ class Player {
             this.y = cDim.y + this.height/2;
             this.opp.y = cDim.y/2 - cDim.sby - cDim.bby/2;
         }
-        if(Game.game.servingSide == 'deuce') {
+        if(Match.game.servingSide == 'deuce') {
             this.x += this.width/2 * this.directionCorrect;
             this.opp.x -= cDim.x*0.3 * this.directionCorrect;
         } else {
@@ -97,7 +97,7 @@ class Player {
         this.opp.hVelocity = 0;
         this.opp.vVelocity = 0;
         let serveSideCorrect;
-        Game.game.servingSide == 'deuce' ? serveSideCorrect = 1 : serveSideCorrect = -1;
+        Match.game.servingSide == 'deuce' ? serveSideCorrect = 1 : serveSideCorrect = -1;
         this.angle = (90 + 90*this.directionCorrect + 5*serveSideCorrect)/180*Math.PI; //Since page dimensions are quadrant 4, 180 degrees is 0 degrees
         keyboardQueries[this.keybinds.flat] = () => {
             new Ball(this.x, this.y-this.height*this.directionCorrect, 1, 0, 0, Physics.g, 0, 0, 0);
@@ -125,7 +125,7 @@ class Player {
         //Moves the player based on the keyboard inputs
         this.move();
 
-        if(Game.game.receiving == this.num && Ball.ball != undefined) {
+        if(Match.point.receiving == this.num && Ball.ball != undefined) {
 
             //Runs if the player can reach the ball
             if((this.x-Ball.ball.x)**2 + (this.y-this.width/2*this.directionCorrect-Ball.ball.y)**2 < (Player.shoulderToRacket + Player.centerToShoulder)**2) {
@@ -296,9 +296,14 @@ class Player {
         if(Math.abs(this.y - cDim.y/2) < 4) {
             ballMomentum.y = 0;
             ballMomentum.x = 0;
-            racketMomentum.z = Physics.netHeight-Ball.ball.z*3;
+            racketMomentum.z = Physics.netHeight-Ball.ball.z * 2;
             racketMomentum.y = racketMomentum.y/swingSpeed*20;
             racketMomentum.x = racketMomentum.x/swingSpeed*20;
+            if(racketMomentum.z > 0) {
+                racketMomentum.y /= 2;
+                racketMomentum.x /= 4;
+                racketMomentum.z *= 1.6;
+            }
         }
         
         ballMomentum.x += racketMomentum.x/4;
@@ -317,9 +322,9 @@ class Player {
         Ball.ball.zVelocity = ballMomentum.z/Ball.mass;
 
         this.windingUp = undefined;
-        Stat.updateStats('hit', {hitType: type, wasVolley: Game.game.bounceCount==0}); //Updates the stats based on ball hits
-        Game.game.bounceCount = 0;
-        Game.game.receiving = this.oppNum;
+        Stat.updateStats('hit', {hitType: type, wasVolley: Match.point.bounceCount==0}); //Updates the stats based on ball hits
+        Match.point.bounceCount = 0;
+        Match.point.receiving = this.oppNum;
 
         Ball.ball.xAngularVelocity /= 5;
         Ball.ball.yAngularVelocity /= 5;
@@ -381,6 +386,11 @@ class Player {
 
     draw() {
         let sizeFactor = 1.05+Math.sin(this.strideDist*2*Math.PI/this.maxStrideDist)/20;
+        let dy = 0;
+        if(this.info.imgsrc != 'Default') {
+            sizeFactor *= 1.5;
+            dy = 0.7;
+        }
         let angle = Math.PI/3.2;
         const ogAngle = angle;
         if(this.hitAnimation.hand != undefined) {
@@ -406,10 +416,20 @@ class Player {
         ctx.fillStyle = 'rgb(255, 255, 255)';
         ctx.strokeStyle = 'rgb(200, 200, 200)';
         ctx.lineWidth = 2;
+        
+        if(this.info.imgsrc != 'Default') { 
+            const aspectRatio = this.info.img.height / this.info.img.width;
+            const scaledWidth = this.width * mScale * sizeFactor;
+            const scaledHeight = scaledWidth * aspectRatio;            
+            Canvas.drawWithAngle(this.x*mScale + courtOffset.x, (this.y+dy*this.directionCorrect)*mScale + courtOffset.y, 0, this.info.img, scaledWidth, scaledHeight);
+        }
+        ctx.lineWidth = 2;
         Canvas.circle(leftHand.x*mScale + courtOffset.x, leftHand.y*mScale + courtOffset.y, this.width/5*mScale*sizeFactor, true);
         Canvas.circle(rightHand.x*mScale + courtOffset.x, rightHand.y*mScale + courtOffset.y, this.width/5*mScale*sizeFactor, true);
         ctx.lineWidth = 3;
-        Canvas.circle(this.x*mScale + courtOffset.x, this.y*mScale + courtOffset.y, this.width/2*mScale*sizeFactor, true);
+        if(this.info.imgsrc == 'Default') {
+            Canvas.drawWithAngle(this.x*mScale + courtOffset.x, (this.y+dy*this.directionCorrect)*mScale + courtOffset.y, 0, this.info.img, this.width*mScale*sizeFactor, /*HERE*/);
+        }
 
         ctx.lineWidth = 5;
         ctx.strokeStyle = 'rgb(0, 0, 0)';
