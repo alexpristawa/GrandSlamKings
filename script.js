@@ -130,6 +130,8 @@ Render.instantiate();
 HomeScreen.instantiate();
 
 let gameFunction = () => {
+    if(Match.paused) return;
+
     if(previousTime == undefined) {
         previousTime = Date.now();
         requestAnimationFrame(gameFunction);
@@ -157,7 +159,7 @@ let gameFunction = () => {
 
     Object.keys(keyboard).forEach(key => {
         if(keyboard[key]) {
-            if(keyboardQueries[key] != undefined) {
+            if(keyboardQueries[key] != undefined && !(Player.players[Match.game.serving] instanceof Ai)) {
                 keyboardQueries[key]();
             }
         } else {

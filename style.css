@@ -124,6 +124,7 @@ body {
     display: none;
     flex-direction: column;
     background-color: rgba(0, 0, 0, 0.7);
+    z-index: 3;
 }
 
 #exclamation > .bigText {
@@ -265,4 +266,125 @@ body {
     background-color: var(--pointColor);
     display: flex;
     flex-direction: column;
+}
+
+div#pauseButton {
+    position: absolute;
+    top: 2.5vh;
+    left: 2.5vh;
+    height: 7vh;
+    width: 7vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1.5vh;
+    font-size: 3rem;
+    cursor: pointer;
+    z-index: 5;
+}
+
+div#pauseButton > i {
+    font-size: 6vh;
+    color: rgba(200, 200, 200);
+}
+
+#pauseMenu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+}
+
+#pauseMenu > div {
+    height: 35vh;
+    width: 40vw;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    border-radius: 2vh;
+}
+
+#pauseMenu > div > div {
+    height: 100%;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.5rem;
+    color: rgb(50, 50, 50);
+    cursor: pointer;
+}
+
+#pauseMenu > div > div.resume {
+    width: 30%;
+}
+
+#pauseMenu > div > div.forfeit > div {
+    height: 25%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#pauseMenu > div > div.forfeit > div:nth-child(3) {
+    height: 50%;
+}
+
+#pauseMenu > div > div.forfeit > div.title {
+    font-size: 2rem;
+}
+
+#pauseMenu > div > div.forfeit > div:nth-child(2) {
+    padding-left: 3%;
+    display: block;
+}
+
+#pauseMenu > div > div.forfeit > div > div {
+    height: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    line-height: 2rem;
+    width: min-content;
+    margin: 0;
+    margin-top: 0.35rem;
+}
+
+#pauseMenu > div > div.forfeit > div > div > span {
+    font-weight: 600;
+    color: green;
+    font-size: 2rem;
+}
+
+#pauseMenu > div button {
+    width: 50%;
+    height: 50%;
+    background-color: var(--setColor);
+    border: 0;
+    border-radius: 1vh;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+}
+
+#pauseMenu > div > div.resume button {
+    height: 25%;
+    width: 90%;
+}
+
+#pauseMenu > div button:hover {
+    background-color: var(--gameColor);
+}
+
+#pauseMenu img {
+    height: 120%;
+    object-fit: contain;
 }

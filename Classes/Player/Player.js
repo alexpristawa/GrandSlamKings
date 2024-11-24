@@ -109,6 +109,7 @@ class Player {
                         let serveType = getKeyByValue(this.keybinds, key);
                         Stat.updateStats('hit', {hitType: 'serve'}); //Updates the stats based on ball hits
                         Physics.serveCollision(Ball.ball, serveType);
+                        Match.point.serveHappened = true;
                         for(let i = 0; i < keys.length; i++) {
                             keyboardQueries[keys[i]] = undefined;
                         }
@@ -259,8 +260,11 @@ class Player {
         if(Math.abs(this.vVelocity) > this.maxVelocity) {
             this.vVelocity = this.maxVelocity*Math.sign(this.vVelocity);
         }
-        this.x += this.hVelocity*deltaTime;
-        this.y += this.vVelocity*deltaTime;
+
+        if(!Match.point.started || (Match.point.serveHappened || Match.game.serving != this.num)) {
+            this.x += this.hVelocity*deltaTime;
+            this.y += this.vVelocity*deltaTime;
+        }
 
         let dx = Math.abs(this.x-OGX);
         let dy = Math.abs(this.y-OGY);

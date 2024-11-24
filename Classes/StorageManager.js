@@ -1,9 +1,24 @@
 class StorageManager {
     
     static incrementCoins(n) {
+        let startNum = storageObj.coins;
         storageObj.coins += n;
         localStorage.grandSlamKings = JSON.stringify(storageObj);
-        document.querySelector('div.coinsHolder > div.coinDiv span').innerHTML = storageObj.coins;
+        let span = document.querySelector('div.coinsHolder > div.coinDiv span');
+        let img = document.querySelector('div.coinsHolder > div.coinDiv img');
+        
+        let dc = storageObj.coins-startNum;
+        let i = 0;
+        let interval = setInterval(() => {
+            i++;
+            img.style.height = `${Math.sin(Math.PI*i/120)*20+70}%`;
+            let inc = (Math.log(50*i+1)/Math.log(120*50+1))*dc;
+            span.innerHTML = Math.round(startNum+inc);
+            if(i == 120) {
+                span.innerHTML = storageObj.coins;
+                clearInterval(interval);
+            }
+        }, 1000/120);
     }
     
     static getStorageObj() {

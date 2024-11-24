@@ -33,6 +33,14 @@ class HomeScreen {
         new Match(1, [player, opponent]);
     }
 
+    static goToHomeScreen(coins = 0) {
+        document.querySelector('screen#gameScreen').fadeOut(1000, false);
+        document.querySelector('screen#homeScreen').fadeIn(1000, 'flex');
+        setTimeout(() => {
+            StorageManager.incrementCoins(coins);
+        }, 1000);
+    }
+
     static updateRewards(i) {
         let opponent = this.exhibitionSlider.selected;
         let sumOfStats = 0;

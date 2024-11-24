@@ -9,6 +9,7 @@ class Point extends Logic {
         this.bounceCount = 0;
         this.serveNum = 1;
         this.receiving = undefined;
+        this.serveHappened = false;
 
         Logic.updateMessage(3000);
         Logic.updateScoreboard();

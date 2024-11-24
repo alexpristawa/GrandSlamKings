@@ -13,6 +13,7 @@ class Ai extends Player {
      * Makes the AI move around the court
      */
     setMoveKeys() {
+        Object.keys(keyboard).forEach(key => keyboard[key] = false);
         //If the AI is receiving, move based on the ball
         if(Match.point.receiving == this.num) {
             let baseline = cDim.y;

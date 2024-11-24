@@ -27,11 +27,7 @@ class Logic {
         if(['You Won!', 'You Lost!'].includes(this.exclamationMessage)) {
             smallDiv.innerHTML = `<img src="Images/coin.png"><span>${coins}</span>`;
             setTimeout(() => {
-                document.querySelector('screen#gameScreen').fadeOut(1000, false);
-                document.querySelector('screen#homeScreen').fadeIn(1000, 'flex');
-                setTimeout(() => {
-                    StorageManager.incrementCoins(coins);
-                }, 1000);
+                HomeScreen.goToHomeScreen(coins);
             }, 2000);
             return;
         }
