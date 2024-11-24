@@ -266,6 +266,8 @@ statBar > div {
 #homeScreen > .m1 > div.challenges {
     width: 34%;
     flex-direction: column;
+    padding-bottom: 0.2%;
+    box-sizing: border-box;
 }
 
 #homeScreen > .m1 > div.challenges > div.middle {

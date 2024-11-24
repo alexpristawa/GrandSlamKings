@@ -71,7 +71,7 @@ document.addEventListener('keydown', (event) => {
     if(event.key == 'Shift') {
         keyboard[event.code] = true;
     } else {
-        keyboard[event.key] = true;
+        keyboard[event.key.toLowerCase()] = true;
     }
 
     if(event.key == 'D' && (event.ctrlKey || event.metaKey)) {
