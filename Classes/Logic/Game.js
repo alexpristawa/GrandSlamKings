@@ -8,21 +8,20 @@ class Game extends Logic{
         this.parent = parent;
         Match.game = this;
 
-        this.serving = 0;
+        this.serving = (this.match.score[0].games + this.match.score[1].games) % 2;
 
-
-        this.serving = this.serving == 0 ? 1:0;
         Logic.exclamationMessage = 'New Game!';
         this.match.score[0].points = 0;
         this.match.score[1].points = 0;
 
-        (this.match.score[0].points +this.match.score[1].points)%2 == 0 ? this.servingSide = 'deuce' : this.servingSide = 'advantage';
-
+        this.servingSide = 'deuce';
         new Point(this);
     }
 
     pointEnded(winner) {
         this.match.score[winner].points++;
+        (this.match.score[0].points +this.match.score[1].points)%2 == 0 ? this.servingSide = 'deuce' : this.servingSide = 'advantage';
+
         Stat.updateStats("point", {difficulty: this.match.difficulty, won: winner == 0});
         StorageManager.resetRecord("point");
         if(this.match.score[winner].points == 5) {
