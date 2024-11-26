@@ -177,7 +177,7 @@ let gameFunction = () => {
 
     if(Ball.ball) {
         Ball.ball.update();
-        ballAltitudeMeter.style.height = `${(1-(15-Ball.ball.z)/15)*100}%`;
+        ballAltitudeMeter.style.height = `${(1-(7.5-Ball.ball.z)/7.5)*100}%`;
         Ball.ball.draw();
         Ball.ball.previousVelocity = Math.sqrt(Ball.ball.hVelocity**2 + Ball.ball.vVelocity**2);
     }

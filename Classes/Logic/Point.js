@@ -68,7 +68,7 @@ class Point extends Logic {
                 }
             }
         } else if(this.bounceCount == 2) {
-            Logic.exclamationMessage = 'Splendid!';
+            Logic.exclamationMessage = 'Point!';
             this.parent.pointEnded(Math.abs(this.receiving-1));
         }
     }

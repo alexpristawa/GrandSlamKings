@@ -3,6 +3,7 @@ class Stat {
     static updateStats(trigger, info) {
         let arr = ['point', 'game', 'set', 'match', 'daily', 'weekly', 'total'];
         let keyIndex = arr.indexOf(trigger)+1;
+        let key2 = info.won ? 'wins':'losses';
 
         arr.slice(keyIndex).forEach(key => {
             if(trigger == "hit") {
@@ -17,24 +18,25 @@ class Stat {
                 }
             } else if(trigger == 'point') {
                 if(['easy', 'medium', 'hard', 'extreme'].includes(info.difficulty)) {
-                    storageObj.record[key].wins[Match.match.difficulty].points++;
+                    storageObj.record[key][key2][Match.match.difficulty].points++;
                 }
-                storageObj.record[key].wins.total.points++;
+                storageObj.record[key][key2].total.points++;
             } else if(trigger == 'game') {
                 if(['easy', 'medium', 'hard', 'extreme'].includes(info.difficulty)) {
-                    storageObj.record[key].wins[Match.match.difficulty].games++;
+                    storageObj.record[key][key2][Match.match.difficulty].games++;
                 }
-                storageObj.record[key].wins.total.games++;
+                storageObj.record[key][key2].total.games++;
             } else if(trigger == 'set') {
                 if(['easy', 'medium', 'hard', 'extreme'].includes(info.difficulty)) {
-                    storageObj.record[key].wins[Match.match.difficulty].sets++;
+                    storageObj.record[key][key2][Match.match.difficulty].sets++;
                 }
-                storageObj.record[key].wins.total.sets++;
+                storageObj.record[key][key2].total.sets++;
             } else if(trigger == 'match') {
                 if(['easy', 'medium', 'hard', 'extreme'].includes(info.difficulty)) {
-                    storageObj.record[key].wins[Match.match.difficulty].matches++;
+                    storageObj.record[key][key2][Match.match.difficulty].matches++;
                 }
-                storageObj.record[key].wins.total.matches++;
+                storageObj.record[key][key2].total.matches++;
+                document.querySelector(`div.stats > .statsHolder > div.${info.difficulty}`).querySelector(info.won? 'won':'lost').innerHTML = storageObj.record.total[key2][Match.match.difficulty].matches;
             }
         });
 

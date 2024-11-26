@@ -70,6 +70,7 @@ class Match extends Logic {
     }
 
     static forfeit() {
+        document.getElementById('pauseMenu').style.display = 'none';
         Stat.updateStats("match", {difficulty: this.difficulty, won: false});
         StorageManager.resetRecord('match');
         HomeScreen.goToHomeScreen(Match.getForfeitCoins());

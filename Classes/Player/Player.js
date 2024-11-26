@@ -152,6 +152,8 @@ class Player {
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.5';
                 ctx.lineWidth = 10;
 
+                let oldKey = this.keybinds.hit;
+
                 //If the player just started winding up
                 if(keyboard[this.getHitKey()] && this.windingUp == undefined) {
                     this.windingUp = 0;
@@ -165,7 +167,6 @@ class Player {
                     this.windingUp += potentialDeltaTime;
 
                     //Finds the type of hit associated with the key pressed
-                    let oldKey = this.keybinds.hit;
                     let key = this.getHitKey();
                     if(key == 'undefined' && oldKey != undefined) key = oldKey;
                     let type = Object.keys(this.keybinds).find(KEY => this.keybinds[KEY] == key && KEY != 'hit' && KEY != 'remember');
@@ -275,6 +276,12 @@ class Player {
     }
 
     swing(swingSpeed, angle, type) {
+        if(type == 'slice') {
+            swingSpeed = swingSpeed/3+5;
+            if(Math.abs(this.y - cDim.y/2) < 5) {
+                swingSpeed = 100;
+            }
+        }
         angle += (Math.random() * Math.PI/20 - Math.PI/40) * (2-this.info.stats.accuracy);
         this.hitAnimation.hand = Math.sign(this.x - Ball.ball.x) * this.directionCorrect;
         this.hitAnimation.swingSpeed = swingSpeed;
@@ -297,16 +304,19 @@ class Player {
             z: 0
         };
 
-        if(Math.abs(this.y - cDim.y/2) < 4) {
+        if(Math.abs(this.y - cDim.y/2) < 5) {
             ballMomentum.y = 0;
             ballMomentum.x = 0;
             racketMomentum.z = Physics.netHeight-Ball.ball.z * 2;
             racketMomentum.y = racketMomentum.y/swingSpeed*20;
             racketMomentum.x = racketMomentum.x/swingSpeed*20;
+
+            //If you're hitting a volley and the ball is under the top of the net
             if(racketMomentum.z > 0) {
+                console.log(JSON.parse(JSON.stringify(racketMomentum)))
                 racketMomentum.y /= 2;
                 racketMomentum.x /= 4;
-                racketMomentum.z *= 1.6;
+                racketMomentum.z = 1;
             }
         }
         
@@ -335,10 +345,10 @@ class Player {
         Ball.ball.zAngularVelocity /= 5;
 
         if(type == 'slice') {
-            Ball.ball.xAngularVelocity -= this.directionCorrect * 7*Math.PI;
-            Ball.ball.hVelocity /= 2;
-            Ball.ball.vVelocity /= 1.5;
-            Ball.ball.zVelocity *= 2;
+            Ball.ball.xAngularVelocity -= this.directionCorrect * 5*Math.PI;
+            Ball.ball.hVelocity /= 2.5;
+            Ball.ball.vVelocity /= 2.5;
+            Ball.ball.zVelocity = (Math.abs(Ball.ball.zVelocity)) * 1.5;
         } else if(type == 'topspin') {
             Ball.ball.xAngularVelocity += this.directionCorrect * 4*Math.PI;
         }
@@ -446,4 +456,28 @@ class Player {
 
 
     }
+}
+
+let function1 = (value) => {
+    let sum = 0;
+    let arr = [];
+    let obj = {};
+    for(let i = 0; i < value; i++) {
+        sum += i;
+        if(value % 2 == 0) {
+            arr.push(i);
+        } else if(value % 4 == 0) {
+            obj[`Number ${i}`] = i;
+        }
+    }
+
+    sum *= 2;
+
+    arr[1] = 5;
+    arr.push(10);
+    arr.splice(1, 1);
+
+    obj.arr = arr;
+    obj.sum = obj;
+    return obj;
 }

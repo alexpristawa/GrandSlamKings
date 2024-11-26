@@ -75,6 +75,7 @@ body {
     width: 1vw;
     height: 60vh;
     border: 3px solid white;
+    background-color: rgba(0, 0, 0, 0.4);
     display: flex;
 }
 
@@ -90,9 +91,9 @@ body {
 #ballAltitude > .target {
     position: absolute;
     width: 100%;
-    height: 8%;
+    height: 16%;
     display: none;
-    top: 79.333%;
+    top: 58.667%;
     z-index: 1;
     display: flex;
     flex-direction: column;
@@ -101,19 +102,19 @@ body {
 #ballAltitude > .target > div:nth-child(1) {
     width: 100%;
     height: 25%;
-    background-color: rgba(138, 30, 30, 0.7);
+    background-color: rgba(138, 30, 30, 0.9);
 }
 
 #ballAltitude > .target > div:nth-child(2) {
     width: 100%;
     height: 50%;
-    background-color: rgba(138, 70, 30, 0.7);
+    background-color: rgba(138, 70, 30, 0.9);
 }
 
 #ballAltitude > .target > div:nth-child(3) {
     width: 100%;
     height: 25%;
-    background-color: rgba(138, 124, 30, 0.7);
+    background-color: rgba(138, 124, 30, 0.9);
 }
 
 #exclamation {

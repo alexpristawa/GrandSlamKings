@@ -6,6 +6,7 @@ class Set extends Logic{
         this.parent = parent;
         Match.set = this;
 
+        Logic.exclamationMessage = "New Game!"
         new Game(this);
     }
 
@@ -24,6 +25,7 @@ class Set extends Logic{
             new Tiebreaker(this, 7, winner);
             return;
         }
+        Logic.exclamationMessage = Match.game.serving == winner ? "Hold!":"Break!";
         new Game(this);
     }
 }

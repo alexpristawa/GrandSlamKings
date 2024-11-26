@@ -10,7 +10,6 @@ class Game extends Logic{
 
         this.serving = (this.match.score[0].games + this.match.score[1].games) % 2;
 
-        Logic.exclamationMessage = 'New Game!';
         this.match.score[0].points = 0;
         this.match.score[1].points = 0;
 

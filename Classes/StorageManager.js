@@ -11,7 +11,11 @@ class StorageManager {
         let i = 0;
         let interval = setInterval(() => {
             i++;
-            img.style.height = `${Math.sin(Math.PI*i/120)*20+70}%`;
+            if(i < 60) {
+                img.style.height = `${Math.sin(Math.PI*i/60)*20+70}%`;
+            } else if(i == 60) {
+                img.style.height = '70%';
+            }
             let inc = (Math.log(50*i+1)/Math.log(120*50+1))*dc;
             span.innerHTML = Math.round(startNum+inc);
             if(i == 120) {
@@ -27,6 +31,12 @@ class StorageManager {
             ['point', 'game', 'set', 'match'].forEach(key => {
                 this.resetRecord(key);
             });
+            if(storageObj.loginInfo.day != Challenge.getDay()) {
+                this.resetRecord('daily');
+            }
+            if(storageObj.loginInfo.week != Challenge.getWeek()) {
+                this.resetRecord('weekly');
+            }
         
             DailyChallenge.getChallenges();
             WeeklyChallenge.getChallenges();
@@ -58,6 +68,17 @@ class StorageManager {
             DailyChallenge.getChallenges();
             WeeklyChallenge.getChallenges();
         }
+        let innerHTML = document.querySelector('div.stats > .statsHolder > div.easy').innerHTML;
+        Object.keys(storageObj.record.total.wins).forEach(key => {
+            let div = document.createElement('div');
+            div.innerHTML = innerHTML;
+            div.classList.add(key);
+            div.querySelector('.type').innerHTML = `${key[0].toUpperCase()}${key.substring(1)}:&nbsp;`;
+            div.querySelector('.won').innerHTML = storageObj.record.total.wins[key].matches;
+            div.querySelector('.lost').innerHTML = storageObj.record.total.losses[key].matches;
+            document.querySelector('div.stats > .statsHolder').appendChild(div);
+        });
+        document.querySelector('div.stats > .statsHolder > div.easy').remove();
         StorageManager.incrementCoins(0);
         localStorage.grandSlamKings = JSON.stringify(storageObj);
     }
