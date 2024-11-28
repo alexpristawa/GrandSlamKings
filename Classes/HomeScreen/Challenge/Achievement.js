@@ -329,16 +329,22 @@ class Achievement extends Challenge{
     }
 
     fillDiv() {
-        if(this.progress >= this.levels.length) return;
-        this.div.querySelector('.first > .title').innerHTML = this.levels[this.progress].name;
-        if(this.levels[this.progress].description != undefined) {
-            this.div.querySelector('.description').innerHTML = this.levels[this.progress].description;
+        let index = Math.min(this.progress, this.levels.length-1);
+
+        this.div.querySelector('.first > .title').innerHTML = this.levels[index].name;
+        if(this.levels[index].description != undefined) {
+            this.div.querySelector('.description').innerHTML = this.levels[index].description;
         } else {
-            let index = this.description.indexOf('+n');
-            this.div.querySelector('.description').innerHTML = this.description.substring(0, index) + this.levels[this.progress].n + this.description.substring(index+2);
+            let i = this.description.indexOf('+n');
+            this.div.querySelector('.description').innerHTML = this.description.substring(0, i) + this.levels[index].n + this.description.substring(i+2);
         }
 
-        this.div.querySelector('.reward > span').innerHTML = (1+this.progress*3)*this.baseReward;
-        this.update(false);
+        this.div.querySelector('.reward > span').innerHTML = (1+index*3)*this.baseReward;
+        if(this.progress < this.levels.length) {
+            this.update(false);
+        } else {
+            this.statBar.style.width = '100%';
+            this.div.classList.add('claimed');
+        }
     }
 }

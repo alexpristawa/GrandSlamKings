@@ -618,7 +618,7 @@ div.challengeHolder > div > .statBarHolder > statBar {
 
 #homeScreen > .m1 > div.achievements .statsHolder > div > span {
     color: white;
-    font-size: 1.3rem;
+    font-size: 1rem;
 }
 
 #homeScreen > .m1 > div.achievements .statsHolder > div > span.won {
@@ -663,6 +663,7 @@ div.achievementsHolder > div {
     width: 100%;
     display: flex;
     margin-bottom: 5%;
+    border-radius: 0.4rem;
 }
 
 div.achievementsHolder > div > div {
@@ -683,7 +684,7 @@ div.achievementsHolder > div > div.first > div {
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     text-align: center;
 }
 
@@ -719,7 +720,7 @@ div.achievementsHolder > div > div.second > div {
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 1rem;
+    font-size: 0.9rem;
     text-align: center;
 }
 
