@@ -329,7 +329,7 @@ class Achievement extends Challenge{
     }
 
     fillDiv() {
-        if(this.progress < this.levels.length) return;
+        if(this.progress >= this.levels.length) return;
         this.div.querySelector('.first > .title').innerHTML = this.levels[this.progress].name;
         if(this.levels[this.progress].description != undefined) {
             this.div.querySelector('.description').innerHTML = this.levels[this.progress].description;
