@@ -107,7 +107,7 @@ class Player {
                 keys.forEach(key => {
                     keyboardQueries[key] = () => {
                         let serveType = getKeyByValue(this.keybinds, key);
-                        Stat.updateStats('hit', {hitType: 'serve'}); //Updates the stats based on ball hits
+                        Stat.updateStats('hit', {hitType: 'serve', playerNum: this.num}); //Updates the stats based on ball hits
                         Physics.serveCollision(Ball.ball, serveType);
                         Match.point.serveHappened = true;
                         for(let i = 0; i < keys.length; i++) {
@@ -336,7 +336,8 @@ class Player {
         Ball.ball.zVelocity = ballMomentum.z/Ball.mass;
 
         this.windingUp = undefined;
-        Stat.updateStats('hit', {hitType: type, wasVolley: Match.point.bounceCount==0}); //Updates the stats based on ball hits
+        Stat.updateStats('hit', {hitType: type, wasVolley: Match.point.bounceCount==0, playerNum: this.num}); //Updates the stats based on ball hits
+        Challenge.checkChallenges('hit', {hitType: type, wasVolley: Match.point.bounceCount==0});
         Match.point.bounceCount = 0;
         Match.point.receiving = this.oppNum;
 

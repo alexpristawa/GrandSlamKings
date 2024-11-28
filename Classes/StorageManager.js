@@ -40,6 +40,7 @@ class StorageManager {
         
             DailyChallenge.getChallenges();
             WeeklyChallenge.getChallenges();
+            Achievement.getAchievements();
         } else {
             storageObj = {
                 version: 0.9,
@@ -67,6 +68,7 @@ class StorageManager {
         
             DailyChallenge.getChallenges();
             WeeklyChallenge.getChallenges();
+            Achievement.getAchievements();
         }
         let innerHTML = document.querySelector('div.stats > .statsHolder > div.easy').innerHTML;
         Object.keys(storageObj.record.total.wins).forEach(key => {

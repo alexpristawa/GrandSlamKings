@@ -314,11 +314,11 @@ div.challengeHolder > div {
     border-radius: 0.4rem;
 }
 
-div.challengeHolder > div.claimed {
+div.challengeHolder > div.claimed, div.achievementsHolder > div.claimed {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
-div.challengeHolder > div.claimed * {
+div.challengeHolder > div.claimed *, div.achievementsHolder > div.claimed * {
     pointer-events: none;
     opacity: 0.7;
 }
@@ -355,6 +355,7 @@ div.challengeHolder > div > .main > div.coinHolder {
     justify-content: space-evenly;
     align-items: center;
     border-radius: 0.2rem;
+    transition: background-color 0.2s ease;
 }
 
 div.challengeHolder > div > .main > div.coinHolder > img {
@@ -374,9 +375,7 @@ div.challengeHolder > div > .main > div.coinHolder > span.reward {
 
 div.challengeHolder > div > .main > div.coinHolder.claimable {
     background-color: rgb(200, 200, 120);
-    border-radius: 0.2rem;
     cursor: pointer;
-    transition: background-color 0.2s ease;
 }
 
 div.challengeHolder > div > .statBarHolder {
@@ -558,6 +557,7 @@ div.challengeHolder > div > .statBarHolder > statBar {
 
 #homeScreen > .m1 > div.achievements > .second {
     width: 30%;
+    border-left: 2px solid black;
 }
 
 #homeScreen > .m1 > div.achievements > .first > .title {
@@ -579,14 +579,15 @@ div.challengeHolder > div > .statBarHolder > statBar {
 }
 
 #homeScreen > .m1 > div.achievements > .second > div {
-    height: 40%;
+    height: 50%;
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 #homeScreen > .m1 > div.achievements > .second > .stats {
-    height: 60%;
+    height: 50%;
 }
 
 #homeScreen > .m1 > div.achievements > .second > .stats > .title {
@@ -601,7 +602,7 @@ div.challengeHolder > div > .statBarHolder > statBar {
 
 #homeScreen > .m1 > div.achievements > .second > .stats > .statsHolder {
     height: 85%;
-    width: 100%;
+    width: 80%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -626,4 +627,103 @@ div.challengeHolder > div > .statBarHolder > statBar {
 
 #homeScreen > .m1 > div.achievements .statsHolder > div > span.lost {
     color: red;
+}
+
+div.achievementsHolder {
+    height: 85%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    padding: 2%;
+    scrollbar-width: thin; /* For modern browsers: makes the scrollbar thinner */
+    scrollbar-color: transparent transparent; /* Hides the track */
+}
+
+div.achievementsHolder::-webkit-scrollbar {
+    width: 10px; /* Set the scrollbar width */
+}
+
+div.achievementsHolder::-webkit-scrollbar-track {
+    background: transparent; /* Make the track transparent */
+}
+
+div.achievementsHolder::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5); /* Set scrollbar thumb color */
+    border-radius: 10px; /* Optional: round edges of the thumb */
+}
+
+div.achievementsHolder::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.8); /* Darker color on hover */
+}
+
+div.achievementsHolder > div {
+    height: 25%;
+    width: 100%;
+    display: flex;
+    margin-bottom: 5%;
+}
+
+div.achievementsHolder > div > div {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+div.achievementsHolder > div > div.second {
+    padding-left: 2%;
+}
+
+div.achievementsHolder > div > div.first > div {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+div.achievementsHolder > div > div.first > div.rewardHolder > div.reward {
+    height: 100%;
+    width: 54%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-radius: 0.2rem;
+    transition: background-color 0.2s ease;
+}
+
+div.achievementsHolder > div > div.first > div.rewardHolder > div.reward.claimable {
+    background-color: rgb(200, 200, 120);
+    cursor: pointer;
+}
+
+div.achievementsHolder > div > div.first > div.rewardHolder > div.reward > img {
+    height: 60%;
+    object-fit: contain;
+}
+
+div.achievementsHolder > div > div.first > div.rewardHolder > div.reward > span {
+    color: white;
+    font-size: 1.4rem;
+}
+
+div.achievementsHolder > div > div.second > div {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+}
+
+div.achievementsHolder > div > div.second > div.statBarHolder > statBar {
+    width: 80%;
+    height: 35% !important;
 }

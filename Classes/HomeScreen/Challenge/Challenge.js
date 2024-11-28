@@ -1,25 +1,32 @@
 class Challenge {
 
     static activeChallenges = {
+        hit: [],
         point: [],
         game: [],
         set: [],
         match: [],
-        tournament: []
+        tournament: [],
+        challenge: [],
     }
 
     constructor(i, j) {
-        let obj = this.constructor.challenges[i][j];
-        this.i = i;
+        let obj;
+        if(!(this instanceof Achievement)) {
+            obj = this.constructor.challenges[i][j];
+            this.i = i;
+        } else {
+            obj = i;
+        }
         Object.keys(obj).forEach(key => {
             this[key] = obj[key];
         });
         if(Object.keys(Challenge.activeChallenges).includes(this.frequency)) Challenge.activeChallenges[this.frequency].push(this);
     }
 
-    static checkChallenges(type) {
+    static checkChallenges(type, obj) {
         Challenge.activeChallenges[type].forEach(challenge => {
-            challenge.update();
+            challenge.update(true, obj);
         });
     }
 
@@ -45,7 +52,7 @@ class Challenge {
         return weeksSinceEpoch;
     }
 
-    update(check = true) {
+    update(check = true, info = {}) {
         if(this.completed) {
             this.complete();
             return;
@@ -55,8 +62,7 @@ class Challenge {
                 this.complete();
             }
         } else if(this.description == "Win a point where the ball hits a racket exactly +n times") {
-            if(check && storageObj.record.point.racketHits == this.n && storageObj.record.point.won === true) {
-                console.log('here');
+            if(check && storageObj.record.point.totalHits == this.n && storageObj.record.point.won === true) {
                 this.complete();
             }
         } else if(this.description == "Win a point by vollying the ball") {
@@ -112,20 +118,45 @@ class Challenge {
     }
 
     complete() {
-        this.completed = true;
+        if(!this.completed) {
+            if(this instanceof DailyChallenge) {
+                Challenge.checkChallenges('challenge', {type: 'daily'});
+            } else if(this instanceof WeeklyChallenge) {
+                Challenge.checkChallenges('challenge', {type: 'weekly'});
+            }
+        }
+        if(this instanceof Achievement) {
+            //this.progress++;
+        } else {
+            this.completed = true;
+        }
         this.statBar.style.width = '100%';
-        this.checkbox.classList.add('checked');
+        if(this.checkbox) this.checkbox.classList.add('checked');
         this.div.querySelector('div.coinHolder').classList.add('claimable');
-        this.div.querySelector('div.coinHolder').addEventListener('click', this.claimReward);
-        if(this.collected) this.claimReward(false);
+        this.div.querySelector('div.coinHolder').addEventListener('click', this.claimRewardFix);
+        if((!(this instanceof Achievement) && this.collected)) {this.claimReward(false)}
     }
 
-    claimReward = (getCoins = true) => {
-        if(getCoins) StorageManager.incrementCoins((this instanceof DailyChallenge ? this.i * 100 + 50 : this.i * 300 + 50) * this.coinMultiplier);
+    claimRewardFix = () => {
+        this.claimReward();
+    }
+
+    claimReward(getCoins = true) {
+        if(getCoins) {
+            if(!(this instanceof Achievement)) {
+                StorageManager.incrementCoins((this instanceof DailyChallenge ? this.i * 100 + 50 : this.i * 300 + 50) * this.coinMultiplier);
+                this.collected = true;
+            } else {
+                StorageManager.incrementCoins((1+this.collected*3)*this.baseReward);
+                this.collected++;
+                this.progress++;
+            }
+        }
         this.div.querySelector('div.coinHolder').classList.remove('claimable');
-        this.div.querySelector('div.coinHolder').removeEventListener('click', this.claimReward);
-        this.div.classList.add('claimed');
-        this.collected = true;
+        this.div.querySelector('div.coinHolder').removeEventListener('click', this.claimRewardFix);
+        if(!this instanceof Achievement || (this instanceof Achievement && this.progress == this.levels.length)) {
+            this.div.classList.add('claimed');
+        }
         localStorage.grandSlamKings = JSON.stringify(storageObj);
     }
 }

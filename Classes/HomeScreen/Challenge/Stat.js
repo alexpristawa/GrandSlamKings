@@ -7,9 +7,12 @@ class Stat {
 
         arr.slice(keyIndex).forEach(key => {
             if(trigger == "hit") {
-                storageObj.record[key].racketHits++;
+                if(info.playerNum == 0) {
+                    storageObj.record[key].racketHits++;
+                }
+                if(key == 'point') storageObj.record[key].totalHits++;
                 //If the player is receiving
-                if(Match.point.receiving == 0) {
+                if(Match.point.receiving == 0 || !Match.point.serveHappened) {
                     if(['topspin', 'slice', 'flat', 'serve'].includes(info.hitType)) {
                         storageObj.record[key][info.hitType+'s']++;
                     } else if(info.wasVolley === true) {
@@ -36,7 +39,8 @@ class Stat {
                     storageObj.record[key][key2][Match.match.difficulty].matches++;
                 }
                 storageObj.record[key][key2].total.matches++;
-                document.querySelector(`div.stats > .statsHolder > div.${info.difficulty}`).querySelector(info.won? 'won':'lost').innerHTML = storageObj.record.total[key2][Match.match.difficulty].matches;
+                console.log(info);
+                document.querySelector(`div.stats > .statsHolder > div.${info.difficulty} .${info.won ? 'won':'lost'}`).innerHTML = storageObj.record.total[key2][Match.match.difficulty].matches;
             }
         });
 
@@ -45,6 +49,7 @@ class Stat {
             Challenge.checkChallenges(trigger);
         } else {
             storageObj.record.point.lastHit = info;
+            Challenge.checkChallenges('hit');
         }
     }
 }

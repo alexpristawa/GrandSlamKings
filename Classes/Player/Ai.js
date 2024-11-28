@@ -47,7 +47,7 @@ class Ai extends Player {
                 //If the other player is receiving, move to the center of the court
                 if(this.x > cDim.x*0.55 + cDim.x*0.15*(2-this.info.stats.technique)) {
                     keyboard[this.keybinds.left] = true;
-                } else if(this.x < cDim.x*0.45) {
+                } else if(this.x < cDim.x*0.45 - cDim.x*0.15*(2-this.info.stats.technique)) {
                     keyboard[this.keybinds.right] = true;
                 }
             }

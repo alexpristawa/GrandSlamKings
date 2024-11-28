@@ -58,6 +58,24 @@
         </div>
     </template>
 
+    <template id = 'achievementTemplate'>
+        <div class = 'first'>
+            <div class = 'title'></div>
+            <div class = 'rewardHolder'>
+                <div class = 'reward coinHolder'>
+                    <img src="Images/coin.png">
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class = 'second'>
+            <div class = 'description'></div>
+            <div class = 'statBarHolder'>
+                <statBar><div></div></statBar>
+            </div>
+        </div>
+    </template>
+
     <screen id = 'homeScreen'>
         <div class = 'top'>
             <div>
@@ -228,6 +246,7 @@
 
     <script src="Classes/Ball/Ball.js"></script>
     <script src="Classes/HomeScreen/Challenge/Challenge.js"></script>
+    <script src="Classes/HomeScreen/Challenge/Achievement.js"></script>
     <script src="Classes/HomeScreen/Challenge/DailyChallenge.js"></script>
     <script src="Classes/HomeScreen/Challenge/Stat.js"></script>
     <script src="Classes/HomeScreen/Challenge/WeeklyChallenge.js"></script>
@@ -242,7 +261,6 @@
     <script src="Classes/Physics/Physics.js"></script>
     <script src="Classes/Player/Player.js"></script>
     <script src="Classes/Player/Ai.js"></script>
-    <script src="Classes/Achievements.js"></script>
     <script src="Classes/StorageManager.js"></script>
     <script src="Classes/Render/Render.js"></script>
     <script src="Scripts/animationFunctions.js"></script>
