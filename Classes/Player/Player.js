@@ -49,7 +49,7 @@ class Player {
         this.height = 0.75;
         this.hVelocity = 0;
         this.vVelocity = 0;
-        this.maxVelocity = 3 + 0.658 *  this.info.stats.speed; //Cover horizontal distance in 2.25 seconds
+        this.maxVelocity = 3 + 0.658 *  this.info.stats.speed.current; //Cover horizontal distance in 2.25 seconds
         this.maxAcceleration = this.maxVelocity*4;
         this.windingUp = undefined;
         this.fastestSwing = 50;
@@ -174,8 +174,8 @@ class Player {
                     //If the key is no longer being held, it hits the ball
                     if(!keyboard[this.getHitKey()]) {
                         this.swing(this.windingUp*60, angle, type);
-                    } else if(this.windingUp > 0.35 + 0.15 * this.info.stats.power) { //If you've been holding down for over half a second, it swings with maximum power
-                        this.swing(15 + 15 * this.info.stats.power, angle, type);
+                    } else if(this.windingUp > 0.35 + 0.15 * this.info.stats.power.current) { //If you've been holding down for over half a second, it swings with maximum power
+                        this.swing(15 + 15 * this.info.stats.power.current, angle, type);
                     }
                     //Displays more power
                     lineDistance += this.windingUp*10;
@@ -282,7 +282,7 @@ class Player {
                 swingSpeed = 100;
             }
         }
-        angle += (Math.random() * Math.PI/20 - Math.PI/40) * (2-this.info.stats.accuracy);
+        angle += (Math.random() * Math.PI/20 - Math.PI/40) * (2-this.info.stats.accuracy.current);
         this.hitAnimation.hand = Math.sign(this.x - Ball.ball.x) * this.directionCorrect;
         this.hitAnimation.swingSpeed = swingSpeed;
         let racketMomentumVector = swingSpeed * Physics.racketMass;

@@ -41,11 +41,12 @@ class StorageManager {
             DailyChallenge.getChallenges();
             WeeklyChallenge.getChallenges();
             Achievement.getAchievements();
+            CharacterSlider.getCharacters();
         } else {
             storageObj = {
                 version: 0.9,
                 coins: 0,
-                characters: ["Default"],
+                characters: [JSON.parse(JSON.stringify(CharacterSlider.defaultCharacter))],
                 character: "Default",
                 opponent: "Easy",
                 achievements: [],
@@ -151,5 +152,10 @@ class StorageManager {
 
     static save() {
         localStorage.grandSlamKings = JSON.stringify(storageObj);
+    }
+
+    static updateCharacters() {
+        storageObj.characters = [CharacterSlider.defaultCharacter, ...CharacterSlider.characters];
+        this.save();
     }
 }

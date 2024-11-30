@@ -42,6 +42,7 @@
                 <span></span>
             </div>
         </div>
+        <i class = 'fas fa-circle-info'></i>
     </template>
 
     <template id = 'challengeTemplate'>
@@ -54,7 +55,7 @@
             </div>
         </div>
         <div class = 'statBarHolder'>
-            <statBar><div></div></statBar>
+            <statBar><div class = 'currentBar'></div></statBar>
         </div>
     </template>
 
@@ -71,7 +72,7 @@
         <div class = 'second'>
             <div class = 'description'></div>
             <div class = 'statBarHolder'>
-                <statBar><div></div></statBar>
+                <statBar><div class = 'currentBar'></div></statBar>
             </div>
         </div>
     </template>
@@ -177,6 +178,18 @@
                 </div>
             </div>
         </div>
+        <div class = 'characterInfo'>
+            <div class = 'first'>
+                <div class = 'name'></div>
+                <div class = 'imageHolder'>
+
+                </div>
+            </div>
+            <div class = 'statsHolder'>
+                
+            </div>
+            <i class = 'fas fa-times' onclick = 'HomeScreen.collapseCharacter()'></i>
+        </div>
     </screen>
 
     <screen id="gameScreen">
@@ -252,6 +265,7 @@
     <script src="Classes/HomeScreen/Challenge/WeeklyChallenge.js"></script>
     <script src="Classes/HomeScreen/CharacterSlider.js"></script>
     <script src="Classes/HomeScreen/HomeScreen.js"></script>
+    <script src="Classes/HomeScreen/StatBar.js"></script>
     <script src="Classes/Logic/Logic.js"></script>
     <script src="Classes/Logic/Game.js"></script>
     <script src="Classes/Logic/Match.js"></script>

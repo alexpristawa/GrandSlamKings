@@ -45,9 +45,9 @@ class Ai extends Player {
                 }
             } else {
                 //If the other player is receiving, move to the center of the court
-                if(this.x > cDim.x*0.55 + cDim.x*0.15*(2-this.info.stats.technique)) {
+                if(this.x > cDim.x*0.55 + cDim.x*0.15*(2-this.info.stats.technique.current)) {
                     keyboard[this.keybinds.left] = true;
-                } else if(this.x < cDim.x*0.45 - cDim.x*0.15*(2-this.info.stats.technique)) {
+                } else if(this.x < cDim.x*0.45 - cDim.x*0.15*(2-this.info.stats.technique.current)) {
                     keyboard[this.keybinds.right] = true;
                 }
             }
@@ -90,7 +90,7 @@ class Ai extends Player {
                 angles[0] = angles[1];
                 angles[1] = temp;
             }
-            if(Math.random()*2 > this.info.stats.technique) {
+            if(Math.random()*2 > this.info.stats.technique.current) {
                 let midAngle = (angles[0] + angles[1])/2;
                 let dA = angles[0] - midAngle;
                 this.aiDesiredAngle = (Math.random()-0.5)*dA + midAngle;
