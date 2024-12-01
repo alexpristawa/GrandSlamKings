@@ -132,7 +132,8 @@ Render.instantiate();
 HomeScreen.instantiate();
 
 let gameFunction = () => {
-    if(Match.paused) return;
+    if(Match.paused || Match.match == null) return;
+
 
     if(previousTime == undefined) {
         previousTime = Date.now();

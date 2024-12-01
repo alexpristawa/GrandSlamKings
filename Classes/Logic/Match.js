@@ -47,6 +47,14 @@ class Match extends Logic {
             StorageManager.resetRecord('match');
             Logic.exclamationMessage = winner == 0 ? 'You Won!':'You Lost!';
             Logic.updateMessage();
+            setTimeout(() => {
+                Match.match = null;
+                Match.set = null;
+                Match.game = null;
+                Match.point = null;
+                Ball.ball = null;
+                Player.players = [];
+            }, 3000);
             return;
         }
         this.score[0].gameScores.push(this.score[0].games);
