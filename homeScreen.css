@@ -1,7 +1,10 @@
 screen#homeScreen {
-    background-image: radial-gradient(circle at 25% top, rgb(87, 128, 68) 0%, rgb(60, 107, 57) 100%);
     align-items: center;
     z-index: 1;
+}
+
+screen#homeScreen, screen#gameScreen {
+    background-image: radial-gradient(circle at 25% top, rgb(87, 128, 68) 0%, rgb(60, 107, 57) 100%);
 }
 
 #homeScreen > div.top {

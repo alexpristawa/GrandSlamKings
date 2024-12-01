@@ -40,7 +40,9 @@ let cDim = {
     x: 8.23,
     y: 23.77,
     sby: 6.4,
-    bby: 5.48
+    bby: 5.48,
+    totalX: 10.97,
+    alleyX: (10.97-8.23)/2
 };
 let mScale = frame.windowHeight*0.8/cDim.y;
 let courtOffset = {
@@ -141,6 +143,15 @@ let gameFunction = () => {
     deltaTime = (currentTime - previousTime)/1000;
     potentialDeltaTime = deltaTime;
     previousTime = currentTime;
+    if(Render.hawkeyeVision && Render.hawkeyeVision.t > 0) {
+        deltaTime = 0;
+        Render.drawCourt();
+        Player.players[0].draw();
+        Player.players[1].draw();
+        BallShadow.updateShadows();
+        requestAnimationFrame(gameFunction);
+        return;
+    }
     if(deltaTime > 0.1) {
         requestAnimationFrame(gameFunction);
         return;
@@ -154,8 +165,6 @@ let gameFunction = () => {
     frame.windowWidth = window.innerWidth;
     frame.windowHeight = window.innerHeight;
     adjustCanvas(canvas, ctx);
-    ctx.fillStyle = 'rgb(63, 120, 56)';
-    ctx.fillRect(0, 0, frame.windowWidth, frame.windowHeight);
 
     Object.keys(keyboard).forEach(key => {
         if(keyboard[key]) {

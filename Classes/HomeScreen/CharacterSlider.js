@@ -71,7 +71,7 @@ class CharacterSlider {
                     multiplier: 1.5,
                     level: 0
                 },
-                technique: 2,
+                technique: {current: 2},
                 ability: "None"
             },
             unlocked: false
@@ -108,7 +108,7 @@ class CharacterSlider {
                     multiplier: 1.5,
                     level: 0
                 },
-                technique: 2,
+                technique: {current: 2},
                 ability: "None"
             },
             unlocked: false
@@ -145,7 +145,7 @@ class CharacterSlider {
                     multiplier: 1.5,
                     level: 0
                 },
-                technique: 2,
+                technique: {current: 2},
                 ability: "None"
             },
             unlocked: false
@@ -182,7 +182,7 @@ class CharacterSlider {
                     multiplier: 1.5,
                     level: 0
                 },
-                technique: 2,
+                technique: {current: 2},
                 ability: "None"
             },
             unlocked: false
@@ -219,7 +219,7 @@ class CharacterSlider {
                     multiplier: 1.5,
                     level: 0
                 },
-                technique: 2,
+                technique: {current: 2},
                 ability: "None"
             },
             unlocked: false
@@ -256,7 +256,7 @@ class CharacterSlider {
                     multiplier: 1.5,
                     level: 0
                 },
-                technique: 2,
+                technique: {current: 2},
                 ability: "None"
             },
             unlocked: false
@@ -293,7 +293,7 @@ class CharacterSlider {
                     multiplier: 1.5,
                     level: 0
                 },
-                technique: 2,
+                technique: {current: 2},
                 ability: "None"
             },
             unlocked: false
@@ -330,7 +330,7 @@ class CharacterSlider {
                     multiplier: 1.5,
                     level: 0
                 },
-                technique: 2,
+                technique: {current: 2},
                 ability: "None"
             },
             unlocked: false
@@ -367,7 +367,7 @@ class CharacterSlider {
                     multiplier: 1.5,
                     level: 0
                 },
-                technique: 2,
+                technique: {current: 2},
                 ability: "None"
             },
             unlocked: false
@@ -404,7 +404,7 @@ class CharacterSlider {
                     multiplier: 1.5,
                     level: 0
                 },
-                technique: 2,
+                technique: {current: 2},
                 ability: "Slice"
             },
             unlocked: false
@@ -542,7 +542,12 @@ class CharacterSlider {
             Object.keys(character.stats).forEach(key => {
                 if(key != 'ability') {
                     let stat = character.stats[key];
-                    let bar = new StatBar(stat.current*50, undefined, stat.max*50, character, key);
+                    let bar;
+                    if(type == 'opponents' && character.stats[key].max != undefined) {
+                        bar = new StatBar(stat.max*50, undefined, undefined, character, key, false);
+                    } else {
+                        bar = new StatBar(stat.current*50, undefined, stat.max*50, character, key);
+                    }
                     div.querySelector(`.stats > .${key}`).appendChild(bar.statBar);
                 } else if(character.stats[key] != 'None') {
                     div.querySelector('.stats > .ability > h5').innerHTML = character.stats[key];

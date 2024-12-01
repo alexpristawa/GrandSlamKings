@@ -49,7 +49,7 @@ class Player {
         this.height = 0.75;
         this.hVelocity = 0;
         this.vVelocity = 0;
-        this.maxVelocity = 3 + 0.658 *  this.info.stats.speed.current; //Cover horizontal distance in 2.25 seconds
+        this.maxVelocity = 2.316 + this.info.stats.speed.current; //Cover horizontal distance in 2.25 seconds
         this.maxAcceleration = this.maxVelocity*4;
         this.windingUp = undefined;
         this.fastestSwing = 50;
@@ -313,7 +313,6 @@ class Player {
 
             //If you're hitting a volley and the ball is under the top of the net
             if(racketMomentum.z > 0) {
-                console.log(JSON.parse(JSON.stringify(racketMomentum)))
                 racketMomentum.y /= 2;
                 racketMomentum.x /= 4;
                 racketMomentum.z = 1;

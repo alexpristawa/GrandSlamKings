@@ -50,18 +50,35 @@ class Point extends Logic {
                 }
             } else {
                 let ballIn = false;
-                if(Ball.ball.x > 0 && Ball.ball.x < cDim.x) {
+                if(Ball.ball.x > 0 - Ball.radius && Ball.ball.x < cDim.x + Ball.radius) {
                     if(this.receiving == 0) {
-                        if(Ball.ball.y > 0 && Ball.ball.y < cDim.y/2) {
+                        if(Ball.ball.y > 0 - Ball.radius && Ball.ball.y < cDim.y/2 + Ball.radius) {
                             ballIn = true; 
                         }
                     } else {
-                        if(Ball.ball.y > cDim.y/2 && Ball.ball.y < cDim.y) {
+                        if(Ball.ball.y > cDim.y/2 - Ball.radius && Ball.ball.y < cDim.y + Ball.radius) {
                             ballIn = true;
                         }
                     }
                 }
                 if(!ballIn) {
+                    let outProperties = {
+                        dx: 0,
+                        dy: 0
+                    };
+                    if(Ball.ball.x < 0) {
+                        outProperties.dx = Ball.ball.x;
+                    } else if(Ball.ball.x > cDim.x) {
+                        outProperties.dx = Ball.ball.x - cDim.x;
+                    }
+                    let directionCorrect = Player.players[this.receiving].directionCorrect;
+                    if(-(Ball.ball.y - (cDim.y/2 + cDim.y/2 * directionCorrect))*directionCorrect < 0) {
+                        outProperties.dy = Ball.ball.y - (cDim.y/2 + cDim.y/2 * directionCorrect);
+                    }
+                    outProperties.dc = Math.sqrt(outProperties.dx**2 + outProperties.dy**2);
+                    if(outProperties.dc < Ball.radius*15) {
+                        Render.hawkeyeVision = outProperties;
+                    }
                     Logic.exclamationMessage = 'Out!';
                     this.bounceCount = 3;
                     this.parent.pointEnded(this.receiving);

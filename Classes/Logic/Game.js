@@ -18,6 +18,31 @@ class Game extends Logic{
     }
 
     pointEnded(winner) {
+        if(Render.hawkeyeVision && Render.hawkeyeVision.ended !== true) {
+            Render.hawkeyeVision.pointWinner = winner;
+            Render.hawkeyeVision.y = Ball.ball.y;
+            Render.hawkeyeVision.x = Ball.ball.x;
+            
+            Render.hawkeyeVision.ogSx = Render.frame.sx;
+            Render.hawkeyeVision.ogSy = Render.frame.sy;
+            Render.hawkeyeVision.ogWidth = Render.frame.width;
+            Render.hawkeyeVision.ogHeight = Render.frame.height;
+            Render.hawkeyeVision.t = -0.5;
+            if(Math.abs(Render.hawkeyeVision.dx) > Math.abs(Render.hawkeyeVision.dy)) {
+                Render.hawkeyeVision.width = 4*Math.abs(Render.hawkeyeVision.dx);
+                Render.hawkeyeVision.height = Render.hawkeyeVision.width * (frame.windowHeight/frame.windowWidth);
+                Render.hawkeyeVision.sx = Render.hawkeyeVision.x - 2*Math.abs(Render.hawkeyeVision.dx);
+                Render.hawkeyeVision.sy = Render.hawkeyeVision.y - 2*Math.abs(Render.hawkeyeVision.dx) * (frame.windowHeight/frame.windowWidth);
+            } else {
+                Render.hawkeyeVision.height = 4*Math.abs(Render.hawkeyeVision.dy);
+                Render.hawkeyeVision.width = Render.hawkeyeVision.height * (frame.windowWidth/frame.windowHeight);
+                Render.hawkeyeVision.sy = Render.hawkeyeVision.y - 2*Math.abs(Render.hawkeyeVision.dy);
+                Render.hawkeyeVision.sx = Render.hawkeyeVision.x - 2*Math.abs(Render.hawkeyeVision.dy) * (frame.windowWidth/frame.windowHeight);
+            }
+            Render.hawkeyeVision.sx += courtOffset.x/mScale;
+            Render.hawkeyeVision.sy += courtOffset.y/mScale;
+            return;
+        }
         this.match.score[winner].points++;
         (this.match.score[0].points +this.match.score[1].points)%2 == 0 ? this.servingSide = 'deuce' : this.servingSide = 'advantage';
 

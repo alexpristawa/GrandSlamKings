@@ -32,7 +32,6 @@ template {
 }
 
 screen#gameScreen {
-    background-color: green;
     z-index: 0;
     display: none;
 }

@@ -39,7 +39,6 @@ class Stat {
                     storageObj.record[key][key2][Match.match.difficulty].matches++;
                 }
                 storageObj.record[key][key2].total.matches++;
-                console.log(info);
                 document.querySelector(`div.stats > .statsHolder > div.${info.difficulty} .${info.won ? 'won':'lost'}`).innerHTML = storageObj.record.total[key2][Match.match.difficulty].matches;
             }
         });

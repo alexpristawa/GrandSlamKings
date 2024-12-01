@@ -109,6 +109,7 @@ class BallShadow {
 
         ctx.lineWidth = 0;
         let radius = Ball.radius * mScale * 5;
+        if(Render.hawkeyeVision) radius /= 5;
         Canvas.circle(mScale*(this.x) + courtOffset.x, mScale*(this.y) + courtOffset.y, radius, false);
     }
 }

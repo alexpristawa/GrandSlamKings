@@ -2,7 +2,7 @@ class StatBar {
 
     static statBars = [];
 
-    constructor(currentDiv, upgradeDiv, capDiv, character, key) {
+    constructor(currentDiv, upgradeDiv, capDiv, character, key, allowUpdates = true) {
         this.character = character;
         this.key = key;
         this.statBar = document.createElement('statBar');
@@ -10,6 +10,7 @@ class StatBar {
         this.currentBar.classList.add('currentBar');
         this.currentBar.style.width = `${currentDiv}%`;
         this.statBar.appendChild(this.currentBar);
+        
 
         if(upgradeDiv) {
             this.upgradeBar = document.createElement('div');
@@ -23,7 +24,7 @@ class StatBar {
             this.capBar.style.width = `${capDiv}%`;
             this.statBar.appendChild(this.capBar);
         }
-        StatBar.statBars.push(this);
+        if(allowUpdates) StatBar.statBars.push(this);
     }
 
     static updateStatBars() {
@@ -40,8 +41,8 @@ class StatBar {
 
     update(currentDiv, upgradeDiv, capDiv, transition) {
         if(transition) {
-            this.currentBar.style.transition = 'width 0.5s ease';
-            if(this.upgradeBar) this.upgradeBar.style.transition = 'width 1s ease-in-out';
+            this.currentBar.style.transition = 'width 0.3s ease';
+            if(this.upgradeBar) this.upgradeBar.style.transition = 'width 0.5s ease-in-out';
         } else {
             this.currentBar.style.transition = '';
             if(this.upgradeBar) this.upgradeBar.style.transition = '';
