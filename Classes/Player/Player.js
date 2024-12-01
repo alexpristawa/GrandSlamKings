@@ -293,6 +293,9 @@ class Player {
         let dy = Math.abs(Math.abs(this.y)-cDim.y/2);
         //let dz = Math.max(1.5*Physics.netHeight-Ball.ball.z + 3*2**(-dy) - (swingSpeed-10)/50 + 10*1.25**(-swingSpeed), 0);
         let dz = (2*Physics.netHeight-Ball.ball.z) * (dy/(cDim.y/2)) * (1.17**(-swingSpeed+15)+0.5 - 0.003*swingSpeed);
+        if(type == 'topspin') {
+            dz += 0.2;
+        }
         let zAngle = Math.atan2(dz, dy);
         let racketMomentum2D = Math.cos(zAngle) * racketMomentumVector;
         let racketMomentum = {

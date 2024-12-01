@@ -14,9 +14,10 @@ class Physics {
         ball.hVelocity -= acceleration*Math.cos(theta)*deltaTime;
         ball.vVelocity -= acceleration*Math.sin(theta)*deltaTime;
 
-        let S = 0.0004;
-        let Fz = S * (ball.vVelocity * ball.xAngularVelocity);
-        let Fx = S * (ball.vVelocity * ball.zAngularVelocity);
+        let s1 = 0.0008;
+        let s2 = 0.0004;
+        let Fz = s1 * (ball.vVelocity * ball.xAngularVelocity);
+        let Fx = s2 * (ball.vVelocity * ball.zAngularVelocity);
 
         let deltaMVZ = Fz * deltaTime;
         let deltaMVX = Fx * deltaTime;
@@ -69,7 +70,7 @@ class Physics {
         
             if(!ball.contactingGround) Match.point.ballBounce();
             ball.contactingGround = true;
-            ball.zVelocity = Math.min(20, ball.zVelocity)
+            ball.zVelocity = Math.min(7, ball.zVelocity)
         } else if(ball.contactingGround) {
             ball.contactingGround = false;
             ball.zVelocity *= Ball.efficiency;
