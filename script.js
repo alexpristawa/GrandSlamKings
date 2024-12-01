@@ -91,7 +91,7 @@ document.addEventListener('keyup', (event) => {
     if(event.key == 'Shift') {
         keyboard[event.code] = false;
     } else {
-        keyboard[event.key] = false;
+        keyboard[event.key.toLowerCase()] = false;
     }
 });
 

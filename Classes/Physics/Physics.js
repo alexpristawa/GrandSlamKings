@@ -86,6 +86,8 @@ class Physics {
         let zAngle = 1/180*Math.PI;
         let racketSwingSpeed = 50; //meters per second
         if(factor <= 1) {
+            Stat.updateStats('hit', {hitType: 'serve', playerNum: servingPlayer.num}); //Updates the stats based on ball hits
+            AudioManager.playHitSound();
             if(factor > 0.25 && factor < 0.75) {
                 zAngle = 7/180*Math.PI;
                 racketSwingSpeed = 32;

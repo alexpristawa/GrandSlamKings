@@ -55,7 +55,8 @@ class Render {
             this.frame.height = this.frame.ey - this.frame.sy;
         } else {
             Render.hawkeyeVision.t += potentialDeltaTime;
-            let t = Math.min(1, Math.max(0, Render.hawkeyeVision.t))**0.5;
+            let x = Math.min(1, Math.max(0, Render.hawkeyeVision.t/Render.hawkeyeVision.totalTime));
+            let t = (6*x**5 - 15*x**4 + 10*x**3);
             this.frame.sx = Render.hawkeyeVision.ogSx + (Render.hawkeyeVision.sx - Render.hawkeyeVision.ogSx)*t;
             this.frame.sy = Render.hawkeyeVision.ogSy + (Render.hawkeyeVision.sy - Render.hawkeyeVision.ogSy)*t;
             this.frame.width = Render.hawkeyeVision.ogWidth + (Render.hawkeyeVision.width - Render.hawkeyeVision.ogWidth)*t;
@@ -94,44 +95,46 @@ class Render {
         ctx.fillStyle = 'rgb(45, 106, 176)';
         Canvas.rect(framePoints[0][0].x*mScale, framePoints[0][0].y*mScale, (framePoints[4][4].x-framePoints[0][0].x)*mScale, (framePoints[4][4].y-framePoints[0][0].y)*mScale, 0, false);
 
-        let connectPoints = (p1, p2, lineWidth = 0.1) => {
+        let connectPoints = (p1, p2, lineAdjust = 1) => {
             ctx.strokeStyle = 'white';
+            let lineWidth = 0.1;
             ctx.lineWidth = lineWidth*mScale;
+            let dpr = window.devicePixelRatio || 1;
             if(p1.x == p2.x) { //Vertical line
-                Canvas.line((p1.x+lineWidth/2)*mScale, p1.y*mScale, (p2.x+lineWidth/2)*mScale, p2.y*mScale, false);
+                Canvas.line((p1.x-lineWidth/2*lineAdjust)*mScale, p1.y*mScale+1/dpr, (p2.x-lineWidth/2*lineAdjust)*mScale, p2.y*mScale-1/dpr, false);
             } else {
-                Canvas.line(p1.x*mScale, (p1.y+lineWidth/2)*mScale, p2.x*mScale, (p2.y+lineWidth/2)*mScale, false);
+                Canvas.line(p1.x*mScale+1/dpr, (p1.y-lineWidth/2*lineAdjust)*mScale, p2.x*mScale-1/dpr, (p2.y-lineWidth/2*lineAdjust)*mScale, false);
             }
         }
         
         //Top baseline
-        connectPoints(framePoints[0][0], framePoints[0][4]);
+        connectPoints(framePoints[0][0], framePoints[0][4], -1);
 
         //Top service line
-        connectPoints(framePoints[1][1], framePoints[1][3]);
+        connectPoints(framePoints[1][1], framePoints[1][3], -1);
 
         //Net line
-        connectPoints(framePoints[2][0], framePoints[2][4]);
+        connectPoints(framePoints[2][0], framePoints[2][4], 0);
 
         //Bottom service line
-        connectPoints(framePoints[3][1], framePoints[3][3]);
+        connectPoints(framePoints[3][1], framePoints[3][3], 1);
 
         //Bottom baseline
-        connectPoints(framePoints[4][0], framePoints[4][4]);
+        connectPoints(framePoints[4][0], framePoints[4][4], 1);
 
         //Left alley
-        connectPoints(framePoints[0][0], framePoints[4][0]);
+        connectPoints(framePoints[0][0], framePoints[4][0], -1);
 
         //Left singles line
-        connectPoints(framePoints[0][1], framePoints[4][1]);
+        connectPoints(framePoints[0][1], framePoints[4][1], -1);
 
         //Service box divider
-        connectPoints(framePoints[1][2], framePoints[3][2]);
+        connectPoints(framePoints[1][2], framePoints[3][2], 0);
 
         //Right singles line
-        connectPoints(framePoints[0][3], framePoints[4][3]);
+        connectPoints(framePoints[0][3], framePoints[4][3], 1);
 
         //Right alley
-        connectPoints(framePoints[0][4], framePoints[4][4]);
+        connectPoints(framePoints[0][4], framePoints[4][4], 1);
     }
 }

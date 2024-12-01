@@ -16,14 +16,15 @@ class Point extends Logic {
         this.started = false;
         setTimeout(() => {
             this.started = true;
+            this.bounceCount = 0;
         }, 3000);
     }
 
     ballBounce() {
-        if(!this.started) return;
         this.bounceCount++;
+        if(this.bounceCount < 4) AudioManager.playBounceSound();
+        if(!this.started) return;
         new BallShadow(Ball.ball.x, Ball.ball.y);
-        
         if(this.bounceCount < 2) {
             if(this.receiving == undefined) { //If the ball is being served, check if it is in the service box
                 let player = Player.players[Match.game.serving];
@@ -76,14 +77,19 @@ class Point extends Logic {
                         dx: 0,
                         dy: 0
                     };
+                    outProperties.y = Ball.ball.y;
+                    outProperties.x = Ball.ball.x;
                     if(Ball.ball.x < 0) {
-                        outProperties.dx = Ball.ball.x;
+                        outProperties.dx = Ball.ball.x + Ball.radius;
+                        outProperties.x = Ball.ball.x + Ball.radius - outProperties.dx/2;
                     } else if(Ball.ball.x > cDim.x) {
-                        outProperties.dx = Ball.ball.x - cDim.x;
+                        outProperties.dx = Ball.ball.x - cDim.x - Ball.radius;
+                        outProperties.x = Ball.ball.x - Ball.radius - outProperties.dx/2;
                     }
                     let directionCorrect = Player.players[this.receiving].directionCorrect;
-                    if(-(Ball.ball.y - (cDim.y/2 + cDim.y/2 * directionCorrect))*directionCorrect < 0) {
-                        outProperties.dy = Ball.ball.y - (cDim.y/2 + cDim.y/2 * directionCorrect);
+                    if(-(Ball.ball.y - Ball.radius*directionCorrect - (cDim.y/2 + cDim.y/2 * directionCorrect))*directionCorrect < 0) {
+                        outProperties.dy = Ball.ball.y - Ball.radius*directionCorrect - (cDim.y/2 + cDim.y/2 * directionCorrect);
+                        outProperties.y = Ball.ball.y - Ball.radius*directionCorrect - outProperties.dy/2;
                     }
                     outProperties.dc = Math.sqrt(outProperties.dx**2 + outProperties.dy**2);
                     if(outProperties.dc < Ball.radius*15 && hawkeye) {

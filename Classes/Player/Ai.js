@@ -16,19 +16,20 @@ class Ai extends Player {
         Object.keys(keyboard).forEach(key => keyboard[key] = false);
         //If the AI is receiving, move based on the ball
         if(Match.point.receiving == this.num) {
-            let baseline = cDim.y;
-            let factor = (baseline-Ball.ball.y) / Ball.ball.vVelocity;
+            let factor = ((this.y-this.width/2)-Ball.ball.y) / Ball.ball.vVelocity; //How long it will take for the ball to reach the player
             let x = Ball.ball.x + Ball.ball.hVelocity * factor;
 
-            //Moves the AI based on how close it is to the ball (doesn't move if within 1/20 of the court's dimensions)
-            if(x < this.x - cDim.y*0.05) {
-                keyboard[this.keybinds.left] = true;
-            } else if(x < this.x) {
-                keyboard[this.keybinds.right] = true;
-            } else if(x > this.x + cDim.y*0.05) {
-                keyboard[this.keybinds.right] = true;
+            if(x < this.x) {
+                x += (Player.shoulderToRacket + Player.centerToShoulder)/Math.sqrt(2);
             } else {
+                x -= (Player.shoulderToRacket + Player.centerToShoulder)/Math.sqrt(2);
+            }
+
+            //Moves the AI based on how close it is to the ball (doesn't move if within 1/20 of the court's width)
+            if(x < this.x) {
                 keyboard[this.keybinds.left] = true;
+            } else if(x > this.x) {
+                keyboard[this.keybinds.right] = true;
             }
 
             //If the ball is moving slowly, go up to reach it. If the ball is moving fast, go down to get more time

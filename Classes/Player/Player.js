@@ -107,7 +107,6 @@ class Player {
                 keys.forEach(key => {
                     keyboardQueries[key] = () => {
                         let serveType = getKeyByValue(this.keybinds, key);
-                        Stat.updateStats('hit', {hitType: 'serve', playerNum: this.num}); //Updates the stats based on ball hits
                         Physics.serveCollision(Ball.ball, serveType);
                         Match.point.serveHappened = true;
                         for(let i = 0; i < keys.length; i++) {
@@ -120,6 +119,7 @@ class Player {
             keyboardQueries[this.keybinds.flat] = undefined;
             keyboardOffQueries[this.keybinds.flat] = Function;
         }
+
     }
 
     update() {
@@ -171,11 +171,15 @@ class Player {
                     if(key == 'undefined' && oldKey != undefined) key = oldKey;
                     let type = Object.keys(this.keybinds).find(KEY => this.keybinds[KEY] == key && KEY != 'hit' && KEY != 'remember');
 
+                    let maxSwingSpeed = 15 + 15 * this.info.stats.power.current;
+                    let maxWindingUp = 0.35 + 0.15 * this.info.stats.power.current
                     //If the key is no longer being held, it hits the ball
                     if(!keyboard[this.getHitKey()]) {
-                        this.swing(this.windingUp*60, angle, type);
-                    } else if(this.windingUp > 0.35 + 0.15 * this.info.stats.power.current) { //If you've been holding down for over half a second, it swings with maximum power
-                        this.swing(15 + 15 * this.info.stats.power.current, angle, type);
+                        this.swing(Math.min(this.windingUp/maxWindingUp, 1) * maxSwingSpeed, angle, type);
+                        AudioManager.playHitSound();
+                    } else if(this.windingUp > maxWindingUp) { //If you've been holding down for over half a second, it swings with maximum power
+                        this.swing(maxSwingSpeed, angle, type);
+                        AudioManager.playHitSound();
                     }
                     //Displays more power
                     lineDistance += this.windingUp*10;
@@ -294,7 +298,7 @@ class Player {
         let racketMomentum = {
             x: -this.directionCorrect * racketMomentum2D * Math.cos(angle),
             y: racketMomentum2D * Math.sin(angle),
-            z: racketMomentumVector * Math.sin(zAngle)
+            z: racketMomentumVector/swingSpeed*Math.max(swingSpeed, type == 'topspin' ? 7.5 : 5) * Math.sin(zAngle)
         };
 
         let ballMomentum = {
@@ -304,7 +308,7 @@ class Player {
             z: 0
         };
 
-        if(Math.abs(this.y - cDim.y/2) < 5) {
+        if(Math.abs(Math.abs(this.y) - cDim.y/2) < 5) {
             ballMomentum.y = 0;
             ballMomentum.x = 0;
             racketMomentum.z = Physics.netHeight-Ball.ball.z * 2;
@@ -323,6 +327,7 @@ class Player {
         ballMomentum.y += racketMomentum.y/4;
         ballMomentum.z += racketMomentum.z/4;
 
+        //Overhead
         if(Ball.ball.z > 2) {
             let p = Ball.ball.z/dy;
             ballMomentum.z = -ballMomentum.y * p/2;

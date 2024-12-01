@@ -20,15 +20,13 @@ class Game extends Logic{
     pointEnded(winner) {
         if(Render.hawkeyeVision && Render.hawkeyeVision.ended !== true) {
             Render.hawkeyeVision.pointWinner = winner;
-            Render.hawkeyeVision.y = Ball.ball.y;
-            Render.hawkeyeVision.x = Ball.ball.x;
             
             Render.hawkeyeVision.ogSx = Render.frame.sx;
             Render.hawkeyeVision.ogSy = Render.frame.sy;
             Render.hawkeyeVision.ogWidth = Render.frame.width;
             Render.hawkeyeVision.ogHeight = Render.frame.height;
             Render.hawkeyeVision.t = -0.5;
-            if(Math.abs(Render.hawkeyeVision.dx) > Math.abs(Render.hawkeyeVision.dy)) {
+            if(Math.abs(Render.hawkeyeVision.dx) < Math.abs(Render.hawkeyeVision.dy) || Render.hawkeyeVision.dy == 0) {
                 Render.hawkeyeVision.width = 4*Math.abs(Render.hawkeyeVision.dx);
                 Render.hawkeyeVision.height = Render.hawkeyeVision.width * (frame.windowHeight/frame.windowWidth);
                 Render.hawkeyeVision.sx = Render.hawkeyeVision.x - 2*Math.abs(Render.hawkeyeVision.dx);
@@ -41,6 +39,7 @@ class Game extends Logic{
             }
             Render.hawkeyeVision.sx += courtOffset.x/mScale;
             Render.hawkeyeVision.sy += courtOffset.y/mScale;
+            Render.hawkeyeVision.totalTime = Math.max(0, Math.log(Render.ogDim.width/Render.hawkeyeVision.width)/Math.log(2)/4);
             return;
         }
         this.match.score[winner].points++;
