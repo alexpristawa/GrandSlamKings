@@ -56,16 +56,19 @@ class Point extends Logic {
                         if(Ball.ball.y > 0 - Ball.radius && Ball.ball.y < cDim.y/2 + Ball.radius) {
                             ballIn = true; 
                         }
-                        if(Ball.ball.y > cDim.y/2 + Ball.radius) {
-                            hawkeye = false;
-                        }
                     } else {
                         if(Ball.ball.y > cDim.y/2 - Ball.radius && Ball.ball.y < cDim.y + Ball.radius) {
                             ballIn = true;
                         }
-                        if(Ball.ball.y < cDim.y/2 - Ball.radius) {
-                            hawkeye = false;
-                        }
+                    }
+                }
+                if(this.receiving == 0) {
+                    if(Ball.ball.y > cDim.y/2 + Ball.radius) {
+                        hawkeye = false;
+                    }
+                } else {
+                    if(Ball.ball.y < cDim.y/2 - Ball.radius) {
+                        hawkeye = false;
                     }
                 }
                 if(!ballIn) {
