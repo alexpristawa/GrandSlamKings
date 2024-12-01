@@ -49,15 +49,22 @@ class Point extends Logic {
                     this.parent.pointEnded(Player.players[Match.game.serving].oppNum);
                 }
             } else {
+                let hawkeye = true;
                 let ballIn = false;
                 if(Ball.ball.x > 0 - Ball.radius && Ball.ball.x < cDim.x + Ball.radius) {
                     if(this.receiving == 0) {
                         if(Ball.ball.y > 0 - Ball.radius && Ball.ball.y < cDim.y/2 + Ball.radius) {
                             ballIn = true; 
                         }
+                        if(Ball.ball.y > cDim.y/2 + Ball.radius) {
+                            hawkeye = false;
+                        }
                     } else {
                         if(Ball.ball.y > cDim.y/2 - Ball.radius && Ball.ball.y < cDim.y + Ball.radius) {
                             ballIn = true;
+                        }
+                        if(Ball.ball.y < cDim.y/2 - Ball.radius) {
+                            hawkeye = false;
                         }
                     }
                 }
@@ -76,7 +83,7 @@ class Point extends Logic {
                         outProperties.dy = Ball.ball.y - (cDim.y/2 + cDim.y/2 * directionCorrect);
                     }
                     outProperties.dc = Math.sqrt(outProperties.dx**2 + outProperties.dy**2);
-                    if(outProperties.dc < Ball.radius*15) {
+                    if(outProperties.dc < Ball.radius*15 && hawkeye) {
                         Render.hawkeyeVision = outProperties;
                     }
                     Logic.exclamationMessage = 'Out!';
