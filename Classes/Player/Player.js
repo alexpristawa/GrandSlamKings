@@ -45,6 +45,7 @@ class Player {
             this.y = cDim.y*3/4;
             this.directionCorrect = 1;
         }
+        this.boundaries = {};
         this.width = 1;
         this.height = 0.75;
         this.hVelocity = 0;
@@ -67,6 +68,39 @@ class Player {
         Player.players[1].update();
         Player.players[0].draw();
         Player.players[1].draw();
+    }
+
+    getBoundaries(type) {
+        let obj = {};
+        if(type == 'game') {
+            if(this.x < 0 && this.x > cDim.x) {
+                obj[this.num == 0 ? 'bottom' : 'top'] = cDim.y/2;
+            }
+        } else if(type == 'serve') {
+            let servingSide = Match.game.servingSide == 'deuce' ? 0 : 1;
+            if((this.num + servingSide) % 2 == 0) {
+                obj = {
+                    left: 0,
+                    right: cDim.x/2
+                }
+                if(this.num == 0) {
+                    obj.bottom = 0;
+                } else {
+                    obj.top = cDim.y;
+                }
+            } else {
+                obj = {
+                    left: cDim.x/2,
+                    right: cDim.x
+                }
+                if(this.num == 0) {
+                    obj.bottom = 0;
+                } else {
+                    obj.top = cDim.y;
+                }
+            }
+        }
+        this.boundaries = obj;
     }
 
     serve() {
@@ -99,6 +133,8 @@ class Player {
         let serveSideCorrect;
         Match.game.servingSide == 'deuce' ? serveSideCorrect = 1 : serveSideCorrect = -1;
         this.angle = (90 + 90*this.directionCorrect + 5*serveSideCorrect)/180*Math.PI; //Since page dimensions are quadrant 4, 180 degrees is 0 degrees
+
+        this.getBoundaries('serve');
         keyboardQueries[this.keybinds.flat] = () => {
             new Ball(this.x, this.y-this.height*this.directionCorrect, 1, 0, 0, Physics.g, 0, 0, 0);
 
@@ -109,6 +145,7 @@ class Player {
                         let serveType = getKeyByValue(this.keybinds, key);
                         Physics.serveCollision(Ball.ball, serveType);
                         Match.point.serveHappened = true;
+                        this.getBoundaries('game');
                         for(let i = 0; i < keys.length; i++) {
                             keyboardQueries[keys[i]] = undefined;
                         }
@@ -266,10 +303,24 @@ class Player {
             this.vVelocity = this.maxVelocity*Math.sign(this.vVelocity);
         }
 
-        if(!Match.point.started || (Match.point.serveHappened || Match.game.serving != this.num)) {
-            this.x += this.hVelocity*deltaTime;
-            this.y += this.vVelocity*deltaTime;
+        this.x += this.hVelocity*deltaTime;
+        this.y += this.vVelocity*deltaTime;
+
+        if(this.x - this.width/2 < this.boundaries.left) {
+            this.x = this.boundaries.left + this.width/2;
+            this.hVelocity = 0;
+        } else if(this.x + this.width/2> this.boundaries.right) {
+            this.x = this.boundaries.right - this.width/2;
+            this.hVelocity = 0;
         }
+        if(this.y - this.height/2 < this.boundaries.top) {
+            this.y = this.boundaries.top + this.height/2;
+            this.vVelocity = 0;
+        } else if(this.y + this.height/2 > this.boundaries.bottom) {
+            this.y = this.boundaries.bottom - this.height/2;
+            this.vVelocity = 0;
+        }
+
 
         let dx = Math.abs(this.x-OGX);
         let dy = Math.abs(this.y-OGY);

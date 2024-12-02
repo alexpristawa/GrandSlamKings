@@ -130,6 +130,7 @@ document.addEventListener('keyup', (event) => {
 adjustCanvas(canvas, ctx);
 Render.instantiate();
 HomeScreen.instantiate();
+AudioManager.preloadAudio();
 
 let gameFunction = () => {
     if(Match.paused || Match.match == null) return;
@@ -153,7 +154,8 @@ let gameFunction = () => {
         requestAnimationFrame(gameFunction);
         return;
     }
-    if(deltaTime > 0.1) {
+    console.log(deltaTime.toFixed(2));
+    if(deltaTime > 0.5) {
         requestAnimationFrame(gameFunction);
         return;
     }
