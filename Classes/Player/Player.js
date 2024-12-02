@@ -73,7 +73,7 @@ class Player {
     getBoundaries(type) {
         let obj = {};
         if(type == 'game') {
-            if(this.x < 0 && this.x > cDim.x) {
+            if(this.x > 0 && this.x < cDim.x) {
                 obj[this.num == 0 ? 'bottom' : 'top'] = cDim.y/2;
             }
         } else if(type == 'serve') {
@@ -244,6 +244,7 @@ class Player {
         let oldKeyboard = JSON.parse(JSON.stringify(keyboard));
         const OGX = this.x;
         const OGY = this.y;
+        if(Match.point.serveHappened) this.getBoundaries('game');
 
         //Lets the ai manipulate the `keyboard` object (this is reset later)
         if(this.ai) this.setMoveKeys();
@@ -313,10 +314,10 @@ class Player {
             this.x = this.boundaries.right - this.width/2;
             this.hVelocity = 0;
         }
-        if(this.y - this.height/2 < this.boundaries.top) {
+        if(this.y - this.width/2 < this.boundaries.top) {
             this.y = this.boundaries.top + this.height/2;
             this.vVelocity = 0;
-        } else if(this.y + this.height/2 > this.boundaries.bottom) {
+        } else if(this.y + this.width/2 > this.boundaries.bottom) {
             this.y = this.boundaries.bottom - this.height/2;
             this.vVelocity = 0;
         }

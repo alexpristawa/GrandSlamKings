@@ -154,7 +154,6 @@ let gameFunction = () => {
         requestAnimationFrame(gameFunction);
         return;
     }
-    console.log(deltaTime.toFixed(2));
     if(deltaTime > 0.5) {
         requestAnimationFrame(gameFunction);
         return;
