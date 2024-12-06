@@ -378,6 +378,7 @@ class Tournament extends Logic {
             if(!isNaN(opponent.stats[key].current)) sumOfStats += opponent.stats[key].current;
         });
         Match.setsToWin = 1;
+        Match.color = this.color;
         Match.winReward = Math.round(Match.setsToWin * 100 * (sumOfStats/4));
         new Match(1, [HomeScreen.characterSlider.selected, opponent], this);
     }

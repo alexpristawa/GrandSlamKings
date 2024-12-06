@@ -93,6 +93,9 @@ class Render {
         }
 
         ctx.fillStyle = 'rgb(45, 106, 176)';
+        if(Match.color != undefined) {
+            ctx.fillStyle = Match.color;
+        }
         Canvas.rect(framePoints[0][0].x*mScale, framePoints[0][0].y*mScale, (framePoints[4][4].x-framePoints[0][0].x)*mScale, (framePoints[4][4].y-framePoints[0][0].y)*mScale, 0, false);
 
         let connectPoints = (p1, p2, lineAdjust = 1) => {

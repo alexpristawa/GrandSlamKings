@@ -28,6 +28,7 @@ class HomeScreen {
     static newExhibition() {
         let player = this.characterSlider.selected;
         let opponent = this.exhibitionSlider.selected;
+        Match.color = undefined;
         new Match(1, [player, opponent]);
     }
 
