@@ -38,11 +38,11 @@ class StorageManager {
                 this.resetRecord('weekly');
             }
         
+            Tournament.getTournaments();
             DailyChallenge.getChallenges();
             WeeklyChallenge.getChallenges();
             Achievement.getAchievements();
             CharacterSlider.getCharacters();
-            Tournament.getTournaments();
         } else {
             storageObj = {
                 version: 0.9,
@@ -67,11 +67,10 @@ class StorageManager {
                 dailyChallenges: [null, null, null],
                 weeklyChallenges: [null, null, null]
             }
-        
+            Tournament.getTournaments();
             DailyChallenge.getChallenges();
             WeeklyChallenge.getChallenges();
             Achievement.getAchievements();
-            Tournament.getTournaments();
         }
         let innerHTML = document.querySelector('div.stats > .statsHolder > div.easy').innerHTML;
         Object.keys(storageObj.record.total.wins).forEach(key => {
