@@ -118,6 +118,11 @@ class Challenge {
     }
 
     complete() {
+        if(this instanceof DailyChallenge) {
+            Challenge.checkChallenges('challenge', {type: 'daily'});
+        } else if(this instanceof WeeklyChallenge) {
+            Challenge.checkChallenges('challenge', {type: 'weekly'});
+        }
         if(this instanceof Achievement) {
             //this.progress++;
         } else {

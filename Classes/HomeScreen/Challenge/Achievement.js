@@ -305,7 +305,7 @@ class Achievement extends Challenge{
             }
             this.statBar.style.width = Math.min(storageObj.record.total.wins.extreme.matches/this.levels[this.progress].n*100, 100) + '%';
         } else if(this.description == "Complete +n daily challenges") {
-            if(check) {
+            if(check && info.type == 'daily') {
                 this.count++;
                 if(this.count >= this.levels[this.progress].n) {
                     this.complete();
@@ -313,7 +313,7 @@ class Achievement extends Challenge{
             }
             this.statBar.style.width = Math.min(this.count/this.levels[this.progress].n*100, 100) + '%';
         } else if(this.description == "Complete +n weekly challenges") {
-            if(check) {
+            if(check && info.type == 'weekly') {
                 this.count++;
                 if(this.count >= this.levels[this.progress].n) {
                     this.complete();
