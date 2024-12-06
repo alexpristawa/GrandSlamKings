@@ -198,4 +198,5 @@ let gameFunction = () => {
 
 storageObj.loginInfo.day = Challenge.getDay();
 storageObj.loginInfo.week = Challenge.getWeek();
+if(storageObj.todaysTournaments.current != null) storageObj.todaysTournaments.current.setActive();
 StorageManager.save();

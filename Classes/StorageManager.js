@@ -42,6 +42,7 @@ class StorageManager {
             WeeklyChallenge.getChallenges();
             Achievement.getAchievements();
             CharacterSlider.getCharacters();
+            Tournament.getTournaments();
         } else {
             storageObj = {
                 version: 0.9,
@@ -70,6 +71,7 @@ class StorageManager {
             DailyChallenge.getChallenges();
             WeeklyChallenge.getChallenges();
             Achievement.getAchievements();
+            Tournament.getTournaments();
         }
         let innerHTML = document.querySelector('div.stats > .statsHolder > div.easy').innerHTML;
         Object.keys(storageObj.record.total.wins).forEach(key => {
@@ -83,7 +85,7 @@ class StorageManager {
         });
         document.querySelector('div.stats > .statsHolder > div.easy').remove();
         StorageManager.incrementCoins(0);
-        localStorage.grandSlamKings = JSON.stringify(storageObj);
+        StorageManager.save();
     }
 
     static getDefaultRecord(type) {

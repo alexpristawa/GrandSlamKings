@@ -28,8 +28,6 @@ class HomeScreen {
     static newExhibition() {
         let player = this.characterSlider.selected;
         let opponent = this.exhibitionSlider.selected;
-        document.querySelector('#homeScreen').fadeOut(200, false);
-        document.querySelector('#gameScreen').fadeIn(200, 'flex');
         new Match(1, [player, opponent]);
     }
 

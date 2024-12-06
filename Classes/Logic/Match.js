@@ -9,10 +9,13 @@ class Match extends Logic {
     static winReward = 300;
     static setsToWin = 1;
 
-    constructor(numPlayers, players) {
+    constructor(numPlayers, players, tournament = null) {
         super();
+        document.querySelector('#homeScreen').fadeOut(200, false);
+        document.querySelector('#gameScreen').fadeIn(200, 'flex');
         Match.match = this;
         Player.instantiate(numPlayers, players);
+        this.tournament = tournament;
 
         this.difficulty = players[1].name.toLowerCase();
         if(!['easy', 'medium', 'hard', 'extreme'].includes(this.difficulty)) {
@@ -47,6 +50,9 @@ class Match extends Logic {
             StorageManager.resetRecord('match');
             Logic.exclamationMessage = winner == 0 ? 'You Won!':'You Lost!';
             Logic.updateMessage();
+            if(this.tournament != null) {
+                this.tournament.matchEnded(winner);
+            }
             setTimeout(() => {
                 Match.match = null;
                 Match.set = null;

@@ -77,6 +77,25 @@
         </div>
     </template>
 
+    <template id = 'tournamentTemplate'>
+        <div class = 'first'>
+            <div class = 'title'>
+                
+            </div>
+            <div class = 'reward'>
+                <img src="Images/coin.png"><span></span>
+            </div>
+        </div>
+        <div class = 'second'>
+            <div class = 'rounds'>
+                <span class = 'alter'></span><span class = 'static'>&nbsp;Rounds</span>
+            </div>
+            <div class = 'difficulty'>
+               <span class = 'alter'></span>
+            </div>
+        </div>
+    </template>
+
     <screen id = 'homeScreen'>
         <div class = 'top'>
             <div>
@@ -101,7 +120,35 @@
                 <div class = 'characterSlider'></div>
             </div>
             <div class = 'tournaments'>
+                <div class = 'first noActiveTournaments'>
+                    <div class = 'title'>Current Tournament</div>
+                    <div class = 'currentTournamentHolder'></div>
 
+                    <div class = 'statsHolder'>
+                        <button class = 'play'>
+                            <span>Play</span>
+                            <span class = 'alter' style = 'color: rgb(200, 200, 200)'></span>
+                        </button>
+                    </div>
+
+                    <div class = 'second buttonsHolder'>
+                        <button class = 'withdraw'>Withdraw</button>
+                        <button class = 'advertise'>
+                            <span>Advertise</span>
+                            <div>
+                                <img src="Images/coin.png">
+                                <span class = 'alter'></span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class = 'noActiveDisplay'>
+                        <div>No Active Tournaments</div>
+                    </div>
+                </div>
+                <div class = 'second'>
+                    <div class = 'title'>Available</div>
+                    <div class = 'availableTournamentsHolder darkScrollbar'></div>
+                </div>
             </div>
         </div>
         <div class = 'm1 m2'>
@@ -148,7 +195,7 @@
             <div class = 'achievements'>
                 <div class = 'first'>
                     <div class = 'title'>Achievements</div>
-                    <div class = 'achievementsHolder'>
+                    <div class = 'achievementsHolder darkScrollbar'>
 
                     </div>
                 </div>
@@ -272,6 +319,7 @@
     <script src="Classes/Logic/Point.js"></script>
     <script src="Classes/Logic/Set.js"></script>
     <script src="Classes/Logic/Tiebreaker.js"></script>
+    <script src="Classes/Logic/Tournament.js"></script>
     <script src="Classes/Physics/Physics.js"></script>
     <script src="Classes/Player/Player.js"></script>
     <script src="Classes/Player/Ai.js"></script>
