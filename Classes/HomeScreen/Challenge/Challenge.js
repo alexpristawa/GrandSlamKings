@@ -88,11 +88,6 @@ class Challenge {
                 this.complete();
             }
             this.statBar.style.width = Math.min(storageObj.record[this.time].wins.extreme.matches/this.n*100, 100) + '%';
-        } else if(this.description == "Win +n tournament") {
-            if(check && storageObj.record[this.time].wins.total.tournaments == this.n) {
-                this.complete();
-            }
-            this.statBar.style.width = Math.min(storageObj.record[this.time].wins.total.tournaments/this.n*100, 100) + '%';
         } else if(this.description == "Win a match without losing a game") {
             if(check && storageObj.record.match.losses.total.games == 0) {
                 this.complete();
@@ -113,18 +108,16 @@ class Challenge {
                 if(this.progress.length == this.n) this.complete();
             }
             this.statBar.style.width = Math.min(this.progress.length/this.n*100, 100) + '%';
+        } else if(this.description == 'Win +n tournament') {
+            if(check && storageObj.record[this.time].wins.tournaments.total >= this.n) {
+                this.complete();
+            }
+            this.statBar.style.width = Math.min(storageObj.record[this.time].wins.tournaments.total/this.n*100, 100) + '%';
         }
         localStorage.grandSlamKings = JSON.stringify(storageObj);
     }
 
     complete() {
-        if(!this.completed) {
-            if(this instanceof DailyChallenge) {
-                Challenge.checkChallenges('challenge', {type: 'daily'});
-            } else if(this instanceof WeeklyChallenge) {
-                Challenge.checkChallenges('challenge', {type: 'weekly'});
-            }
-        }
         if(this instanceof Achievement) {
             //this.progress++;
         } else {
@@ -154,7 +147,7 @@ class Challenge {
         }
         this.div.querySelector('div.coinHolder').classList.remove('claimable');
         this.div.querySelector('div.coinHolder').removeEventListener('click', this.claimRewardFix);
-        if(!this instanceof Achievement || (this instanceof Achievement && this.progress == this.levels.length)) {
+        if(!(this instanceof Achievement) || (this instanceof Achievement && this.progress == this.levels.length)) {
             this.div.classList.add('claimed');
         }
         localStorage.grandSlamKings = JSON.stringify(storageObj);

@@ -133,6 +133,18 @@ class Tournament extends Logic {
     ]
 
     static getTournaments() {
+        if(storageObj.record.daily.wins.tournaments == undefined) {
+            let keys = ['daily', 'weekly', 'total']
+            let obj = {
+                'grandSlams': 0,
+                'ATPWTATours': 0,
+                'challengerTournaments': 0
+            }
+            keys.forEach(key => {
+                storageObj.record[key].wins.tournaments = JSON.parse(JSON.stringify(obj));
+                storageObj.record[key].losses.tournaments = JSON.parse(JSON.stringify(obj));
+            });
+        }
         if(storageObj.todaysTournaments == undefined) {
             storageObj.todaysTournaments = {
                 available: [],
@@ -413,6 +425,7 @@ class Tournament extends Logic {
     win() {
         setTimeout(() => {
             StorageManager.incrementCoins(this.reward);
+            Stat.updateStats('tournament', {won: true, difficulty: this.key});
             this.end();
         }, 3000);
     }

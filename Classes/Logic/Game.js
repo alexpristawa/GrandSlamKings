@@ -33,7 +33,6 @@ class Game extends Logic{
                 Render.hawkeyeVision.sy = Render.hawkeyeVision.y - 2*Math.abs(Render.hawkeyeVision.dx) * (frame.windowHeight/frame.windowWidth);
             } else {
                 Render.hawkeyeVision.height = 4*Math.abs(Render.hawkeyeVision.dy);
-                console.log(Render.hawkeyeVision.height)
                 Render.hawkeyeVision.width = Render.hawkeyeVision.height * (frame.windowWidth/frame.windowHeight);
                 Render.hawkeyeVision.sy = Render.hawkeyeVision.y - 2*Math.abs(Render.hawkeyeVision.dy);
                 Render.hawkeyeVision.sx = Render.hawkeyeVision.x - 2*Math.abs(Render.hawkeyeVision.dy) * (frame.windowWidth/frame.windowHeight);

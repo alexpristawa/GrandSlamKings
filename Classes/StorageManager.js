@@ -75,13 +75,15 @@ class StorageManager {
         }
         let innerHTML = document.querySelector('div.stats > .statsHolder > div.easy').innerHTML;
         Object.keys(storageObj.record.total.wins).forEach(key => {
-            let div = document.createElement('div');
-            div.innerHTML = innerHTML;
-            div.classList.add(key);
-            div.querySelector('.type').innerHTML = `${key[0].toUpperCase()}${key.substring(1)}:&nbsp;`;
-            div.querySelector('.won').innerHTML = storageObj.record.total.wins[key].matches;
-            div.querySelector('.lost').innerHTML = storageObj.record.total.losses[key].matches;
-            document.querySelector('div.stats > .statsHolder').appendChild(div);
+            if(key != 'tournaments') {
+                let div = document.createElement('div');
+                div.innerHTML = innerHTML;
+                div.classList.add(key);
+                div.querySelector('.type').innerHTML = `${key[0].toUpperCase()}${key.substring(1)}:&nbsp;`;
+                div.querySelector('.won').innerHTML = storageObj.record.total.wins[key].matches;
+                div.querySelector('.lost').innerHTML = storageObj.record.total.losses[key].matches;
+                document.querySelector('div.stats > .statsHolder').appendChild(div);
+            }
         });
         document.querySelector('div.stats > .statsHolder > div.easy').remove();
         StorageManager.incrementCoins(0);
@@ -131,6 +133,12 @@ class StorageManager {
                     sets: 0,
                     matches: 0,
                     tournaments: 0
+                },
+                tournaments: {
+                    grandSlams: 0,
+                    ATPWTATours: 0,
+                    challengerTournaments: 0,
+                    total: 0
                 }
             };
             return {

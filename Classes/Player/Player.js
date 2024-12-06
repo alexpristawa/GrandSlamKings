@@ -57,7 +57,6 @@ class Player {
     }
 
     static instantiate(numPlayers, players) {
-        console.log(players);
         Player.players[0] = new Player(0, players[0]);
         numPlayers == 1 ? Player.players[1] = new Ai(1, players[1]) : Player.players[1] = new Player(1, players[1]);
         Player.players[0].opp = Player.players[1];

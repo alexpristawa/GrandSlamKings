@@ -3,6 +3,9 @@ class Stat {
     static updateStats(trigger, info) {
         let arr = ['point', 'game', 'set', 'match', 'daily', 'weekly', 'total'];
         let keyIndex = arr.indexOf(trigger)+1;
+        if(trigger == 'tournament') {
+            keyIndex = arr.indexOf('daily');
+        }
         let key2 = info.won ? 'wins':'losses';
 
         arr.slice(keyIndex).forEach(key => {
@@ -40,15 +43,20 @@ class Stat {
                 }
                 storageObj.record[key][key2].total.matches++;
                 document.querySelector(`div.stats > .statsHolder > div.${info.difficulty} .${info.won ? 'won':'lost'}`).innerHTML = storageObj.record.total[key2][Match.match.difficulty].matches;
+            } else if(trigger == 'tournament') {
+                storageObj.record[key][key2].tournaments[info.difficulty]++;
+                storageObj.record[key][key2].tournaments.total++;
             }
         });
 
-        if(trigger != 'hit') {
+        if(['hit', 'tournament'].indexOf(trigger) == -1) {
             storageObj.record[trigger].won = info.won;
             Challenge.checkChallenges(trigger);
-        } else {
+        } else if(trigger == 'hit') {
             storageObj.record.point.lastHit = info;
             Challenge.checkChallenges('hit');
+        } else {
+            Challenge.checkChallenges(trigger);
         }
     }
 }

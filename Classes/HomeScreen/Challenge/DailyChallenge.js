@@ -45,7 +45,8 @@ class DailyChallenge extends Challenge {
                 description: "Win +n tournament",
                 frequency: "tournament",
                 n: 1,
-                suffix: "s"
+                suffix: "s",
+                time: "daily"
             },
             {
                 description: "Win a match without losing a game",

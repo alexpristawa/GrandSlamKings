@@ -20,7 +20,8 @@ class WeeklyChallenge extends Challenge {
                 description: "Win +n tournament",
                 n: 3,
                 suffix: "s",
-                frequency: "tournament"
+                frequency: "tournament",
+                time: "weekly"
             }
         ]
     ];
