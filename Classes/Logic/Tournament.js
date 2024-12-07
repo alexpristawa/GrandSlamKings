@@ -293,8 +293,13 @@ class Tournament extends Logic {
             for(let i = 0; i < this.opponentArr.length; i++) {
                 for(let j = 0; j < this.opponentArr[i].length; j++) {
                     let obj = this.opponentArr[i][j];
+                    console.log(JSON.parse(JSON.stringify(this.opponentArr)));
                     if(j == 0) {
+                        console.log(obj[0]);
                         obj[0] = HomeScreen.characterSlider.arr.find(character => character.name == obj[0].name);
+                        if(obj[0] == null) {
+                            console.log('it broke');
+                        }
                         this.opponentArr[i][j] = [obj[0], HomeScreen.exhibitionSlider.arr.find(character => character.name == obj[1].name)];
                     } else {
                         this.opponentArr[i][j] = [HomeScreen.exhibitionSlider.arr.find(character => character.name == obj[0].name), HomeScreen.exhibitionSlider.arr.find(character => character.name == obj[1].name)];
@@ -317,7 +322,7 @@ class Tournament extends Logic {
         document.querySelector('.availableTournamentsHolder').appendChild(div);
     }
 
-    setActive() {
+    setActive(opponentArr = true) {
         if(storageObj.todaysTournaments.current != null) {
             storageObj.todaysTournaments.current.div.remove();
         }
@@ -339,7 +344,7 @@ class Tournament extends Logic {
         storageObj.todaysTournaments.available = storageObj.todaysTournaments.available.filter(tournament => tournament != this);
 
         this.getAdvertisement();
-        this.getOpponentArr();
+        if(opponentArr) this.getOpponentArr();
 
         StorageManager.save();
     }
