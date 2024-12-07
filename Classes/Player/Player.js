@@ -19,6 +19,8 @@ class Player {
             hand: undefined,
             time: 0
         }
+        let nameDiv = document.querySelector(`#scoreboard > div.names > div:nth-child(${this.num+1})`);
+        nameDiv.innerHTML = `${this.info.name} ${this.info.lastName} ${this instanceof Ai ? "(Bot)" : ""}`;
         if(num == 0) {
             this.keybinds = {
                 up: 'w',

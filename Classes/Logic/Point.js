@@ -102,7 +102,9 @@ class Point extends Logic {
             }
         } else if(this.bounceCount == 2) {
             Logic.exclamationMessage = 'Point!';
-            this.parent.pointEnded(Math.abs(this.receiving-1));
+            let winner = Math.abs(this.receiving-1);
+            if(winner == undefined) winner = Math.abs(Match.game.serving-1);
+            this.parent.pointEnded(winner);
         }
     }
 }

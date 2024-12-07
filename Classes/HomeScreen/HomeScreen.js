@@ -44,7 +44,7 @@ class HomeScreen {
         let opponent = this.exhibitionSlider.selected;
         let sumOfStats = 0;
         Object.keys(opponent.stats).forEach(key => {
-            if(!isNaN(opponent.stats[key].current)) sumOfStats += opponent.stats[key].current;
+            if(!isNaN(opponent.stats[key].max)) sumOfStats += opponent.stats[key].max;
         });
         Match.winReward = Math.round(i * 100 * (sumOfStats/4));
         Match.setsToWin = i;
