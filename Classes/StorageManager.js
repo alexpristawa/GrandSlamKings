@@ -38,11 +38,11 @@ class StorageManager {
                 this.resetRecord('weekly');
             }
         
+            CharacterSlider.getCharacters();
             Tournament.getTournaments();
             DailyChallenge.getChallenges();
             WeeklyChallenge.getChallenges();
             Achievement.getAchievements();
-            CharacterSlider.getCharacters();
         } else {
             storageObj = {
                 version: 0.9,

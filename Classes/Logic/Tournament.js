@@ -133,12 +133,13 @@ class Tournament extends Logic {
     ]
 
     static getTournaments() {
-        if(storageObj.record.daily.wins.tournaments == undefined) {
+        if(storageObj.record.daily.wins.tournaments == undefined || storageObj.record.daily.wins.tournaments.total == undefined) {
             let keys = ['daily', 'weekly', 'total']
             let obj = {
-                'grandSlams': 0,
-                'ATPWTATours': 0,
-                'challengerTournaments': 0
+                grandSlams: 0,
+                ATPWTATours: 0,
+                challengerTournaments: 0,
+                total: 0
             }
             keys.forEach(key => {
                 storageObj.record[key].wins.tournaments = JSON.parse(JSON.stringify(obj));
