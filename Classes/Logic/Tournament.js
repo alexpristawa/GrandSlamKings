@@ -403,9 +403,9 @@ class Tournament extends Logic {
                     let m2 = this.opponentArr[this.round][i][1];
                     let p1;
                     let p2;
-                    if(m1.technique > m2.technique || i == 0) {
+                    if(m1.technique > m2.technique || i == 0 || m2.lastName == "") {
                         p1 = m1;
-                    } else if(m2.technique > m1.technique) {
+                    } else if(m2.technique > m1.technique || m1.lastName == "") {
                         p1 = m2;
                     } else if(m1.speed > m2.speed) {
                         p1 = m1;
@@ -414,9 +414,9 @@ class Tournament extends Logic {
                     }
                     m1 = this.opponentArr[this.round][i+1][0];
                     m2 = this.opponentArr[this.round][i+1][1];
-                    if(m1.technique > m2.technique) {
+                    if(m1.technique > m2.technique || m2.lastName == "") {
                         p2 = m1;
-                    } else if(m2.technique > m1.technique) {
+                    } else if(m2.technique > m1.technique || m1.lastName == "") {
                         p2 = m2;
                     } else if(m1.speed > m2.speed) {
                         p2 = m1;
