@@ -423,7 +423,7 @@ class Tournament extends Logic {
                     } else {
                         p2 = m2;
                     }
-                    this.opponentArr[this.round-1].push([m1, m2]);
+                    this.opponentArr[this.round-1].push([p1, p2]);
                 }
             }
         }
