@@ -43,6 +43,7 @@ class Point extends Logic {
                 if(this.serveNum == 1) {
                     Logic.exclamationMessage = 'Second serve!';
                     this.serveNum++;
+                    this.bounceCount = 3;
                     Logic.updateMessage(1000);
                 } else {
                     Logic.exclamationMessage = 'Double Fault!';
@@ -102,9 +103,7 @@ class Point extends Logic {
             }
         } else if(this.bounceCount == 2) {
             Logic.exclamationMessage = 'Point!';
-            let winner = Math.abs(this.receiving-1);
-            if(winner == undefined) winner = Math.abs(Match.game.serving-1);
-            this.parent.pointEnded(winner);
+            this.parent.pointEnded(Math.abs(this.receiving-1));
         }
     }
 }
