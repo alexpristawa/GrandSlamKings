@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Sensitive files
+.env
+items/
+
+# Generated files
+package-lock.json
+
+# Development tools
+Playgrounds/
+
+# OS files
+.DS_Store
